@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 
     private int nPescados { get; set; }
 
+    private GameObject player;
+    private ThirdPersonMovement scriptJugador;
 
 
     private void Awake()
@@ -27,6 +29,27 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(gameObject);  // Si ya hay una instancia, destruir la nueva
+        }
+
+        // Intentar encontrar al jugador automáticamente si no está asignado
+        if (player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player");
+            if (player == null)
+            {
+                Debug.LogWarning("No se encontró un objeto con la etiqueta 'Player' en la escena.");
+            }
+
+            
+        }
+
+        if (player != null)
+        {
+            scriptJugador = player.GetComponent<ThirdPersonMovement>();
+            if (scriptJugador == null)
+            {
+                Debug.LogError("El objeto del jugador no tiene un componente ThirdPersonMovement.");
+            }
         }
     }
 
@@ -68,6 +91,12 @@ public class GameManager : MonoBehaviour
     public void sumarCroqueta()
     {
         nCroquetas += 1;
+    }
+
+    //Añade una habilidad nueva al jugador
+    public void AddAbility(AbilityType newAbility)
+    {
+        scriptJugador.AddAbility(newAbility);
     }
 
 }

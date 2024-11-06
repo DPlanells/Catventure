@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class ThirdPersonMovement : MonoBehaviour
 {
+
     // Movimiento
     public CharacterController controller;
     public Transform cam;
 
     public float walkSpeed = 6f;  // Velocidad normal
     public float runSpeed = 12f;  // Velocidad al correr
+    private float specialRunMultiplier = 2f;  // Multiplicador de velocidad especial para habilidad Correr
 
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
@@ -26,13 +28,15 @@ public class ThirdPersonMovement : MonoBehaviour
 
     bool isGrounded;
 
-    static public bool canJump = false;
-
-    //Animacion
+    // Animación
     public Animator anim;
 
+    // Habilidades
+    //public enum AbilityType { Correr, Saltar, Atacar }
+    private bool canRun = false;
+    private bool canPerformJump = false;
+    private bool canAttack = false;
 
-    // Update is called once per frame
     void Update()
     {
         // Comprobar si está en el suelo
@@ -41,7 +45,7 @@ public class ThirdPersonMovement : MonoBehaviour
         // Reiniciar la velocidad en Y cuando toca el suelo
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2f;  // Se asegura de que no siga cayendo infinitamente
+            velocity.y = -2f;  // Asegura que no siga cayendo infinitamente
             horizontalVelocity = Vector3.zero;  // Reiniciar la velocidad horizontal al aterrizar
         }
 
@@ -50,11 +54,18 @@ public class ThirdPersonMovement : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
-        // Determinar si está corriendo (al presionar Shift)
+        // Determinar si está corriendo (al presionar Shift o tecla especial "C" si tiene la habilidad)
         float currentSpeed = walkSpeed;
         if (isGrounded)
         {
-            currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+             if (Input.GetKey(KeyCode.LeftShift) && canRun)
+            {
+                currentSpeed = walkSpeed * specialRunMultiplier;
+            }
+            else
+            {
+                currentSpeed = walkSpeed;
+            }
         }
 
         if (isGrounded && direction.magnitude >= 0.1f)
@@ -71,7 +82,7 @@ public class ThirdPersonMovement : MonoBehaviour
         }
 
         // Salto
-        if (isGrounded && Input.GetButtonDown("Jump") && canJump)
+        if (isGrounded && Input.GetButtonDown("Jump") && canPerformJump)  // Solo salta si tiene la habilidad de Saltar
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
@@ -89,6 +100,11 @@ public class ThirdPersonMovement : MonoBehaviour
         // Animación
         UpdateAnimationParameters(direction, currentSpeed);
 
+        // Habilidad de ataque
+        if (canAttack && Input.GetKeyDown(KeyCode.F))
+        {
+            Attack();
+        }
     }
 
     // Método para actualizar los parámetros de animación
@@ -103,13 +119,39 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             anim.SetFloat("speed", 0.5f);  // Animación de caminar
         }
-        else if (currentSpeed == runSpeed)
+        else if (currentSpeed >= runSpeed)
         {
             anim.SetFloat("speed", 1f);  // Animación de correr
         }
 
         // Actualizar el estado de si está en el suelo o no
         anim.SetBool("onGround", isGrounded);
+    }
+
+    // Método para atacar
+    private void Attack()
+    {
+        anim.SetTrigger("attack"); // Activar animación de ataque
+        // Aquí iría la lógica para dañar a enemigos
+        Debug.Log("Ataque ejecutado");
+    }
+
+    // Método para agregar habilidades al jugador
+    public void AddAbility(AbilityType ability)
+    {
+        switch (ability)
+        {
+            case AbilityType.Correr:
+                canRun = true;
+                break;
+            case AbilityType.Saltar:
+                canPerformJump = true;
+                break;
+            case AbilityType.Atacar:
+                canAttack = true;
+                break;
+        }
+        Debug.Log("Habilidad adquirida: " + ability);
     }
 
 }
