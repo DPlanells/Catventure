@@ -9,9 +9,12 @@ public class ThirdPersonMovement : MonoBehaviour
     public CharacterController controller;
     public Transform cam;
 
-    public float walkSpeed = 6f;  // Velocidad normal
-    public float runSpeed = 12f;  // Velocidad al correr
-    private float specialRunMultiplier = 2f;  // Multiplicador de velocidad especial para habilidad Correr
+    public static float walkSpeed = 6f;  // Velocidad normal
+    private static float specialRunMultiplier = 2f;  // Multiplicador de velocidad especial para habilidad Correr
+    public float runSpeed = walkSpeed * specialRunMultiplier;  // Velocidad al correr
+    private float currentSpeed;
+
+    private Vector3 direction;
 
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
@@ -39,6 +42,16 @@ public class ThirdPersonMovement : MonoBehaviour
 
     void Update()
     {
+
+        ManejarMovimiento();
+        ManejarAtaque();
+
+        // Animación
+        UpdateAnimationParameters(direction, currentSpeed);
+    }
+
+    private void ManejarMovimiento()
+    {
         // Comprobar si está en el suelo
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
@@ -52,13 +65,13 @@ public class ThirdPersonMovement : MonoBehaviour
         // Movimiento básico
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        direction = new Vector3(horizontal, 0f, vertical).normalized;
 
         // Determinar si está corriendo (al presionar Shift o tecla especial "C" si tiene la habilidad)
-        float currentSpeed = walkSpeed;
+        currentSpeed = walkSpeed;
         if (isGrounded)
         {
-             if (Input.GetKey(KeyCode.LeftShift) && canRun)
+            if (Input.GetKey(KeyCode.LeftShift) && canRun)
             {
                 currentSpeed = walkSpeed * specialRunMultiplier;
             }
@@ -96,16 +109,20 @@ public class ThirdPersonMovement : MonoBehaviour
         // Aplicar gravedad
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
 
-        // Animación
-        UpdateAnimationParameters(direction, currentSpeed);
 
+
+    private void ManejarAtaque()
+    {
         // Habilidad de ataque
         if (canAttack && Input.GetKeyDown(KeyCode.F))
         {
-            Attack();
+            
         }
     }
+
+
 
     // Método para actualizar los parámetros de animación
     private void UpdateAnimationParameters(Vector3 direction, float currentSpeed)

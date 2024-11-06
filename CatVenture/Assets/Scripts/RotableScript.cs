@@ -9,6 +9,6 @@ public class RotableScript : MonoBehaviour
     private void Update()
     {
         // Rotar en el eje Y en sentido de las agujas del reloj
-        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.right, rotationSpeed * Time.deltaTime);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Floating : MonoBehaviour
 {
     public float floatAmplitude = 0.25f;   // Amplitud del movimiento de flotación (cuánto sube y baja)
-    public float floatSpeed = 1.0f;       // Velocidad de flotación (qué tan rápido sube y baja)
+    public float floatSpeed = 0.5f;       // Velocidad de flotación (qué tan rápido sube y baja)
 
     private Vector3 startPos;
 

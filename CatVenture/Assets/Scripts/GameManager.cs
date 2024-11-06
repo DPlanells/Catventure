@@ -8,11 +8,11 @@ public class GameManager : MonoBehaviour
     // Singleton instance
     public static GameManager instance;
 
-    private int nVidas { get; set; }
+    private int nVidas;
 
-    private int nCroquetas { get; set; }
+    private int nCroquetas;
 
-    private int nPescados { get; set; }
+    private int nPescados;
 
     private GameObject player;
     private ThirdPersonMovement scriptJugador;
@@ -51,6 +51,9 @@ public class GameManager : MonoBehaviour
                 Debug.LogError("El objeto del jugador no tiene un componente ThirdPersonMovement.");
             }
         }
+
+
+        StartGame();
     }
 
     // Método para iniciar el juego
@@ -98,5 +101,17 @@ public class GameManager : MonoBehaviour
     {
         scriptJugador.AddAbility(newAbility);
     }
+
+    public int getVidas()
+    {
+        return nVidas;
+    }
+
+    public int getCroquetas()
+    {
+        return nCroquetas;
+    }
+
+    
 
 }
