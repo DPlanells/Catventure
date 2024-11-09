@@ -31,6 +31,15 @@ public class ThirdPersonMovement : MonoBehaviour
 
     bool isGrounded;
 
+
+    //Ataque
+    public float attackRange = 1.5f; // La distancia al frente del jugador donde aparece la kill zone
+    public int attackDamage = 50; // Daño infligido a los enemigos
+    public LayerMask enemyLayer; // Layer de los enemigos para verificar colisiones
+
+
+
+
     // Animación
     public Animator anim;
 
@@ -39,6 +48,12 @@ public class ThirdPersonMovement : MonoBehaviour
     private bool canRun = false;
     private bool canPerformJump = false;
     private bool canAttack = false;
+
+
+    //Tiempo de invulnerabilidad
+    public float invulnerabilityDuration = 2f; // Duración de la invulnerabilidad en segundos
+    private bool isInvulnerable = false; // Estado de invulnerabilidad
+
 
     void Update()
     {
@@ -116,10 +131,38 @@ public class ThirdPersonMovement : MonoBehaviour
     private void ManejarAtaque()
     {
         // Habilidad de ataque
-        if (canAttack && Input.GetKeyDown(KeyCode.F))
+        if (canAttack && Input.GetKeyDown(KeyCode.J))
         {
-            
+            Attack();
         }
+    }
+
+
+    private void Attack()
+    {
+        // Crear la kill zone justo en frente del jugador
+        Vector2 position = transform.position + transform.right * attackRange; // Asume que el "frente" es hacia la derecha
+
+        // Detectar todos los enemigos en la kill zone usando un círculo de colisión
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(position, attackRange, enemyLayer);
+
+        OnDrawGizmosSelected();
+
+        // Aplicar daño a cada enemigo en la zona
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            //enemy.GetComponent<GenericEnemy>().TakeDamage(attackDamage);
+        }
+
+        
+    }
+
+    // Opcional: Dibujar la kill zone en la vista de escena para depuración
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Vector2 position = transform.position + transform.right * attackRange;
+        Gizmos.DrawWireSphere(position, attackRange);
     }
 
 
@@ -145,13 +188,7 @@ public class ThirdPersonMovement : MonoBehaviour
         anim.SetBool("onGround", isGrounded);
     }
 
-    // Método para atacar
-    private void Attack()
-    {
-        anim.SetTrigger("attack"); // Activar animación de ataque
-        // Aquí iría la lógica para dañar a enemigos
-        Debug.Log("Ataque ejecutado");
-    }
+
 
     // Método para agregar habilidades al jugador
     public void AddAbility(AbilityType ability)
@@ -170,5 +207,31 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         Debug.Log("Habilidad adquirida: " + ability);
     }
+
+
+
+    public void activarVulnerabilidad()
+    {
+        // Activar el estado de invulnerabilidad
+        StartCoroutine(InvulnerabilityTimer());
+    }
+
+    private IEnumerator InvulnerabilityTimer()
+    {
+        isInvulnerable = true; // Activar invulnerabilidad
+
+
+        yield return new WaitForSeconds(invulnerabilityDuration); // Esperar el tiempo de invulnerabilidad
+
+        isInvulnerable = false; // Desactivar invulnerabilidad
+
+    }
+
+    public bool getVulnerable()
+    {
+        return isInvulnerable;
+    }
+
+
 
 }

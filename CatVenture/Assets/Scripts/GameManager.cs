@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.Examples;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour
 
     private GameObject player;
     private ThirdPersonMovement scriptJugador;
+
+
+    
 
 
     private void Awake()
@@ -112,6 +116,26 @@ public class GameManager : MonoBehaviour
         return nCroquetas;
     }
 
+    public void dañarJugador(int danyo)
+    {
+
+        if (scriptJugador.getVulnerable() == false)
+        {
+            nVidas -= danyo;
+            scriptJugador.activarVulnerabilidad();
+            if (nVidas <= 0)
+            {
+                Morir();
+            }
+        }
+        
+    }
+
+    private void Morir()
+    {
+        //Logica de finalizar una partida
+        Debug.Log("Partida finalizada, jugador muerto");
+    }
     
 
 }

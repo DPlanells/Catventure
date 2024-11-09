@@ -7,6 +7,8 @@ public class CrabEnemy : MonoBehaviour
     public float speed = 2.0f; // Velocidad de movimiento
     public float moveDistance = 5.0f; // Distancia de movimiento a cada lado
 
+    
+
     private Vector2 startPos;
     private int direction = 1;
 
@@ -14,9 +16,16 @@ public class CrabEnemy : MonoBehaviour
     {
         // Guarda la posición inicial del cangrejo
         startPos = transform.position;
+    
     }
 
     void Update()
+    {
+        Move();
+        
+    }
+
+    private void Move()
     {
         // Mueve el cangrejo a la izquierda o derecha
         transform.Translate(Vector2.right * direction * speed * Time.deltaTime);
@@ -37,5 +46,14 @@ public class CrabEnemy : MonoBehaviour
         transform.localScale = localScale;
     }
 
+
+    private void OnCollisionEnter(Collision other)
+    {
+        // Si el enemigo colisiona con el jugador, inflige daño al jugador
+        if (other.gameObject.CompareTag("Player"))
+        {
+            GameManager.instance.dañarJugador(1);
+        }
+    }
 
 }
