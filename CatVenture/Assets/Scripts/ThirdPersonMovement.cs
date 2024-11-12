@@ -54,6 +54,13 @@ public class ThirdPersonMovement : MonoBehaviour
     public float invulnerabilityDuration = 2f; // Duración de la invulnerabilidad en segundos
     private bool isInvulnerable = false; // Estado de invulnerabilidad
 
+    Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
 
     void Update()
     {
@@ -146,7 +153,6 @@ public class ThirdPersonMovement : MonoBehaviour
         // Detectar todos los enemigos en la kill zone usando un círculo de colisión
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(position, attackRange, enemyLayer);
 
-        OnDrawGizmosSelected();
 
         // Aplicar daño a cada enemigo en la zona
         foreach (Collider2D enemy in hitEnemies)
@@ -157,13 +163,7 @@ public class ThirdPersonMovement : MonoBehaviour
         
     }
 
-    // Opcional: Dibujar la kill zone en la vista de escena para depuración
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Vector2 position = transform.position + transform.right * attackRange;
-        Gizmos.DrawWireSphere(position, attackRange);
-    }
+
 
 
 
@@ -230,6 +230,23 @@ public class ThirdPersonMovement : MonoBehaviour
     public bool getVulnerable()
     {
         return isInvulnerable;
+    }
+
+    private void retroceder()
+    {
+        // Aplica una fuerza en la dirección opuesta a la dirección "forward" del objeto
+        float fuerzaHaciaAtras = 5f;
+
+        Vector3 direccionHaciaAtras = -transform.forward;
+        rb.AddForce(direccionHaciaAtras * fuerzaHaciaAtras, ForceMode.Impulse);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            retroceder();
+        }
     }
 
 
