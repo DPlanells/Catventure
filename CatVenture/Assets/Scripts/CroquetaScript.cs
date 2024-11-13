@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class CroquetaScript : MonoBehaviour
 {
+
+    void Update()
+    {
+        transform.localRotation = Quaternion.Euler(Time.time * 100f, Time.time * 100f, 0);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // Verifica si el objeto que entra es el jugador (etiqueta "Player")
