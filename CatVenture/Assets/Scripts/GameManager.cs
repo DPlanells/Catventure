@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro.Examples;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,7 +12,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     private int nVidas;
-
+    public TMP_Text croquetas;
+    public Animator Order;
     private int nCroquetas;
 
     private int nPescados;
@@ -67,7 +70,8 @@ public class GameManager : MonoBehaviour
         nVidas = 7;
         nCroquetas = 0;
         nPescados = 0;
-
+        croquetas = GameObject.FindGameObjectWithTag("Cont").GetComponent<TMP_Text>();
+        Order = GameObject.FindGameObjectWithTag("Order").GetComponent<Animator>();
 
         Debug.Log("Juego iniciado");
     }
@@ -98,6 +102,10 @@ public class GameManager : MonoBehaviour
     public void sumarCroqueta()
     {
         nCroquetas += 1;
+        Order.Play("OrderBaja");
+        croquetas.text =nCroquetas.ToString();
+        Debug.Log("Croquetas recogidas = " + nCroquetas);
+        Order.Play("OrderSube");
     }
 
     //Añade una habilidad nueva al jugador
