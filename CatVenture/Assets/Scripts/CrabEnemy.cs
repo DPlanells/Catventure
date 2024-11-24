@@ -118,10 +118,13 @@ public class CrabEnemy : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        Debug.Log("Se ha colisionado con un cangrejo");
+
         // Si el enemigo colisiona con el jugador, inflige daño al jugador
         if (other.gameObject.CompareTag("Player"))
         {
             GameManager.instance.dañarJugador(1);
+            Debug.Log("Se ha dañado al jugador");
         }
     }
 }
