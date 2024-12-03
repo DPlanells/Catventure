@@ -8,6 +8,8 @@ TagManager:
   - Ground
   - Cont
   - Order
+  - MainMenu
+  - Creditos
   layers:
   - Default
   - TransparentFX
