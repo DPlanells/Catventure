@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuPrinc : MonoBehaviour
 {
@@ -13,21 +14,57 @@ public class MenuPrinc : MonoBehaviour
     public Canvas MUI;
     public Canvas CredUI;
     public Animator CredAnim;
+    public Button IniciarBoton;
+    public Button VolverBoton;
+    int tiempo;
 
     private void Start()
     {
         MCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Animator>();
         MUI = GameObject.FindGameObjectWithTag("MainMenu").GetComponent<Canvas>();
         CredUI = GameObject.FindGameObjectWithTag("Creditos").GetComponent<Canvas>();
+
+        
         MCamera.SetBool("Creditos", false);
         CredUI.enabled = false;
 
     }
-// Start is called before the first frame update
+
+    public void Update() {
+        bool MUIBool = MUI.enabled;
+        if (Input.GetKeyDown(KeyCode.Return) && MUIBool) { 
+            IniciarBoton.onClick.Invoke(); 
+        }
+        bool CredBool = CredUI.enabled;
+        if (Input.GetKeyDown(KeyCode.Escape) && CredBool)
+        {
+            VolverBoton.onClick.Invoke();
+        }
+    }
+
+    public void CoroutineTimer(int tiempo)
+    {
+        
+        StartCoroutine(timer(tiempo));
+    }
+
+    private IEnumerator timer(int tiempo)
+    {
+        yield return new WaitForSeconds(tiempo/2);
+        MUI.enabled = false;
+        yield return new WaitForSeconds(tiempo);
+        SceneManager.LoadScene("MainScene");
+
+    }
+
     public void NuevaPartida()
 
     {
-    SceneManager.LoadScene("MainScene");
+        MCamera.SetTrigger("IniciarPartida");
+        tiempo = 3;
+        CoroutineTimer(tiempo);
+        
+        
     }
     public void CargarPartida()
     {
