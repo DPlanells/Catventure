@@ -30,6 +30,7 @@ public class ThirdPersonMovement : MonoBehaviour
     public LayerMask groundMask;  // Capa que representa el suelo
 
     bool isGrounded;
+    bool isDancing;
 
 
     //Ataque
@@ -114,12 +115,20 @@ public class ThirdPersonMovement : MonoBehaviour
             // Mover al personaje si está en el suelo
             controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
             horizontalVelocity = moveDir.normalized * currentSpeed; // Guardar la velocidad horizontal al saltar
+            isDancing = false;
         }
 
         // Salto
         if (isGrounded && Input.GetButtonDown("Jump") && canPerformJump)  // Solo salta si tiene la habilidad de Saltar
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            isDancing = false;
+        }
+
+        //Baile
+        if (isGrounded && Input.GetButtonDown("Dance"))
+        {
+            isDancing = true;
         }
 
         // Mantener la velocidad horizontal durante el salto
@@ -186,6 +195,8 @@ public class ThirdPersonMovement : MonoBehaviour
 
         // Actualizar el estado de si está en el suelo o no
         anim.SetBool("onGround", isGrounded);
+
+        anim.SetBool("Dance", isDancing);
     }
 
 

@@ -5,10 +5,20 @@ using UnityEngine;
 public class CroquetaScript : MonoBehaviour
 {
 
+    public AudioClip collectSound;
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     void Update()
     {
         transform.localRotation = Quaternion.Euler(Time.time * 100f, Time.time * 100f, 0);
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,11 +29,11 @@ public class CroquetaScript : MonoBehaviour
             GameManager.instance.sumarCroqueta();
 
             // Reproducir el sonido de recolección (si se ha asignado)
-            
-
-            // Destruir el objeto coleccionable
-            Destroy(gameObject);
+            AudioSource.PlayClipAtPoint(collectSound, transform.position);
+            Destroy(gameObject); // Destroy the collectible immediately
         }
     }
+
+    
 
 }
