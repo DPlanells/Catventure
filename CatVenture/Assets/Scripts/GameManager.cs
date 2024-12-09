@@ -20,9 +20,12 @@ public class GameManager : MonoBehaviour
 
     private GameObject player;
     private ThirdPersonMovement scriptJugador;
+    private GameObject UIHabilidad;
+    private Animator UIAnimator;
+    private TMP_Text UIAText;
 
 
-    
+
 
 
     private void Awake()
@@ -59,7 +62,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-
+        
         StartGame();
     }
 
@@ -72,7 +75,11 @@ public class GameManager : MonoBehaviour
         nPescados = 0;
         croquetas = GameObject.FindGameObjectWithTag("Cont").GetComponent<TMP_Text>();
         Order = GameObject.FindGameObjectWithTag("Order").GetComponent<Animator>();
-
+        UIHabilidad = GameObject.FindGameObjectWithTag("UIHabilidad");
+        UIAnimator= UIHabilidad.GetComponent<Animator>();
+        UIAText = UIHabilidad.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
+        
+      
         Debug.Log("Juego iniciado");
     }
 
@@ -105,13 +112,34 @@ public class GameManager : MonoBehaviour
         Order.Play("OrderBaja");
         croquetas.text =nCroquetas.ToString();
         Debug.Log("Croquetas recogidas = " + nCroquetas);
-        Order.Play("OrderSube");
     }
 
     //Añade una habilidad nueva al jugador
     public void AddAbility(AbilityType newAbility)
     {
         scriptJugador.AddAbility(newAbility);
+
+        switch (newAbility) {
+
+            case AbilityType.Correr:
+                UIAText.text = "Ahora Catti puede correr con Shift!";
+                Debug.Log("Ahora Catti puede correr con Shift!");
+            break;
+
+            case AbilityType.Saltar:
+                UIAText.text = "Ahora Catti puede saltar con la barra espaciadora!";
+            break;
+
+            case AbilityType.Atacar:
+                UIAText.text = "Ahora Catti puede atacar con X!";
+
+            break;
+
+            default: break;
+        }
+
+        UIAnimator.Play("UIHabilidadSubir");
+
     }
 
     public int getVidas()
