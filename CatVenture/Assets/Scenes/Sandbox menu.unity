@@ -6244,6 +6244,44 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f3c8ef93c3b90d46bcf326622e7b4ae, type: 3}
+--- !u!84 &625696627
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WaterDepthMap
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 1024
+  m_Height: 1024
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1001 &626509274
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7108,44 +7146,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19778a1cec25085409918a09efe96dee, type: 3}
---- !u!84 &856318262
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: WaterDepthMap
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 1024
-  m_Height: 1024
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &984029088 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6224905944949471576, guid: af7ceb3a156384244b369264664ca1b6, type: 3}
@@ -7195,35 +7195,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 870.279
+      value: 870.21
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 49.475
+      value: 49.49
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 562.124
+      value: 562.17
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.46874183
+      value: 0.43525383
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: -0.1739914
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8833353
+      value: 0.82022774
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.32788366
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -43.578
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -7269,6 +7269,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 30d23ac406a961b4ea6c4985f14a13d3, type: 2}
+    - target: {fileID: 5866666021909216657, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3e072000b8978dd43bb7a6a67612ab13, type: 2}
     - target: {fileID: 7892616665576223149, guid: c7a22c3aea865264c8ea86cccc1006be, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
