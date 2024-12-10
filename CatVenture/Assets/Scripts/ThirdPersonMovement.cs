@@ -254,8 +254,10 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Se ha chocado con: " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            Debug.Log("Se ha chocado con un cangrejo");
             retroceder();
         }
     }
