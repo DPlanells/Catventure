@@ -46,9 +46,9 @@ public class ThirdPersonMovement : MonoBehaviour
 
     // Habilidades
     //public enum AbilityType { Correr, Saltar, Atacar }
-    private bool canRun = false;
-    private bool canPerformJump = false;
-    private bool canAttack = false;
+    public bool canRun = false;
+    public bool canPerformJump = false;
+    public bool canAttack = false;
 
 
     //Tiempo de invulnerabilidad
