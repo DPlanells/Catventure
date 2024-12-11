@@ -94,4 +94,8 @@ public class MenuPrinc : MonoBehaviour
         MUI.enabled = true;
     }
 
+    public void salirJuego()
+    {
+        Application.Quit();
+    }
 }

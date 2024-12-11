@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
             break;
 
             case AbilityType.Atacar:
-                UIAText.text = "Ahora Catti puede atacar con X!";
+                UIAText.text = "Ahora Catti puede atacar con J!";
 
             break;
 

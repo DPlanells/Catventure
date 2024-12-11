@@ -55,7 +55,6 @@ public class ThirdPersonMovement : MonoBehaviour
     //Tiempo de invulnerabilidad
     public float invulnerabilityDuration = 2f; // Duración de la invulnerabilidad en segundos
     private bool isInvulnerable = false; // Estado de invulnerabilidad
-    RaycastHit hit;
     Rigidbody rb;
 
     private void Start()
@@ -79,9 +78,8 @@ public class ThirdPersonMovement : MonoBehaviour
     }
     private void ManejarMovimiento()
     {
-        // Comprobar si está en el suelo
         
-        Debug.Log(isGrounded);
+       
         // Reiniciar la velocidad en Y cuando toca el suelo
         if (isGrounded && velocity.y < 0)
         {
