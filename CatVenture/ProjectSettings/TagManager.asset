@@ -11,6 +11,7 @@ TagManager:
   - MainMenu
   - Creditos
   - UIHabilidad
+  - AguaFondo
   layers:
   - Default
   - TransparentFX
