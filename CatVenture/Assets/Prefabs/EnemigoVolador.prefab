@@ -121,8 +121,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circleRadius: 5
   circleSpeed: 2
-  attackSpeed: 5
-  returnSpeed: 3
+  attackSpeed: 6
+  returnSpeed: 6
   playerDetectionRange: 8
   obstacleMask:
     serializedVersion: 2

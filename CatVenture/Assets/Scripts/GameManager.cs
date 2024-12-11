@@ -167,6 +167,15 @@ public class GameManager : MonoBehaviour
         
     }
 
+    public void dañarJugadorAgua(int danyo)
+    {
+        nVidas -= danyo;
+        if (nVidas <= 0)
+        {
+            Morir();
+        }
+    }
+
     private void Morir()
     {
         //Logica de finalizar una partida

@@ -53,6 +53,7 @@ public class CrabEnemy : MonoBehaviour
                 if (playerDistance <= chaseDistance)
                 {
                     currentState = State.Chase;
+                    speed = 3.0f;
                 }
                 break;
 
@@ -61,6 +62,7 @@ public class CrabEnemy : MonoBehaviour
                 if (playerDistance > stopChaseDistance)
                 {
                     currentState = State.Return;
+                    speed = 2.0f;
                 }
                 break;
 

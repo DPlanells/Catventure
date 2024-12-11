@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.Examples;
 using UnityEngine;
 
 public class ThirdPersonMovement : MonoBehaviour
@@ -243,23 +244,18 @@ public class ThirdPersonMovement : MonoBehaviour
         return isInvulnerable;
     }
 
-    private void retroceder()
-    {
-        // Aplica una fuerza en la dirección opuesta a la dirección "forward" del objeto
-        float fuerzaHaciaAtras = 5f;
 
-        Vector3 direccionHaciaAtras = -transform.forward;
-        rb.AddForce(direccionHaciaAtras * fuerzaHaciaAtras, ForceMode.Impulse);
-    }
 
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Se ha chocado con: " + collision.gameObject.name);
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Debug.Log("Se ha chocado con un cangrejo");
-            retroceder();
+
+       
+        if (collision.gameObject.CompareTag("AguaFondo")){
+            GameManager.instance.dañarJugadorAgua(3);
+            Debug.Log("Se han quitado 3 vidas");
         }
+        
     }
 
 
