@@ -27,7 +27,7 @@ public class ThirdPersonMovement : MonoBehaviour
     private Vector3 horizontalVelocity;  // Velocidad horizontal en el salto
 
     public Transform groundCheck;  // Punto para verificar si está en el suelo
-    public float groundDistance = 0.4f;  // Distancia del punto de verificación del suelo
+    public float groundDistance = 3f;  // Distancia del punto de verificación del suelo
     public LayerMask groundMask;  // Capa que representa el suelo
 
     bool isGrounded;
@@ -55,7 +55,7 @@ public class ThirdPersonMovement : MonoBehaviour
     //Tiempo de invulnerabilidad
     public float invulnerabilityDuration = 2f; // Duración de la invulnerabilidad en segundos
     private bool isInvulnerable = false; // Estado de invulnerabilidad
-
+    RaycastHit hit;
     Rigidbody rb;
 
     private void Start()
@@ -66,23 +66,26 @@ public class ThirdPersonMovement : MonoBehaviour
 
     void Update()
     {
-
         ManejarMovimiento();
         ManejarAtaque();
-
         // Animación
         UpdateAnimationParameters(direction, currentSpeed);
+
     }
 
+    void FixedUpdate()
+    {
+        isGrounded =  Physics.CheckSphere(groundCheck.position,groundDistance ,groundMask);
+    }
     private void ManejarMovimiento()
     {
         // Comprobar si está en el suelo
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
+        
+        Debug.Log(isGrounded);
         // Reiniciar la velocidad en Y cuando toca el suelo
         if (isGrounded && velocity.y < 0)
         {
-            velocity.y = -2f;  // Asegura que no siga cayendo infinitamente
+            velocity.y = -5f;  // Asegura que no siga cayendo infinitamente
             horizontalVelocity = Vector3.zero;  // Reiniciar la velocidad horizontal al aterrizar
         }
 
