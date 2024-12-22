@@ -14,6 +14,7 @@ public class MenuPrinc : MonoBehaviour
     public Canvas MUI;
     public Canvas CredUI;
     public Animator CredAnim;
+    public Animator BotonVolver;
     public Button IniciarBoton;
     public Button VolverBoton;
     int tiempo;
@@ -78,6 +79,7 @@ public class MenuPrinc : MonoBehaviour
         MUI.enabled = false;
         MCamera.SetBool("Creditos", true);
         CredUI.enabled = true;
+        BotonVolver.SetTrigger("creditos");
         CredAnim.SetTrigger("creditos");
 
 
