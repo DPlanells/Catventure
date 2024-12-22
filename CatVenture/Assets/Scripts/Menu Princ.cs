@@ -8,9 +8,9 @@ public class MenuPrinc : MonoBehaviour
 {
 
     public Animator MCamera;
-    public Animator MUIChild1;
     public Animator MUIChild2;
     public Animator MUIChild3;
+    public Animator MUIChild4;
     public Canvas MUI;
     public Canvas CredUI;
     public Animator CredAnim;
@@ -87,10 +87,10 @@ public class MenuPrinc : MonoBehaviour
         MCamera.SetBool("Creditos", false);
         CredAnim.SetTrigger("creditosvolver");
         CredUI.enabled = false;
-        Debug.Log(MUIChild1);
-        MUIChild1.SetTrigger("trns");
+        Debug.Log(MUIChild2);
         MUIChild2.SetTrigger("trns");
         MUIChild3.SetTrigger("trns");
+        MUIChild4.SetTrigger("trns");
         MUI.enabled = true;
     }
 
