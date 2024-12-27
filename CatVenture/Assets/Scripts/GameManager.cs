@@ -21,9 +21,13 @@ public class GameManager : MonoBehaviour
     private GameObject player;
     private ThirdPersonMovement scriptJugador;
     private GameObject UIHabilidad;
+    private GameObject UIVidas;
     private Animator UIAnimator;
+    private Animator UIVidasAnimator;
     private TMP_Text UIAText;
-
+    private TMP_Text UIVidasText1;
+    private TMP_Text UIVidasText2;
+    private Animator UIVidasAnimator2;
 
 
 
@@ -78,8 +82,11 @@ public class GameManager : MonoBehaviour
         UIHabilidad = GameObject.FindGameObjectWithTag("UIHabilidad");
         UIAnimator= UIHabilidad.GetComponent<Animator>();
         UIAText = UIHabilidad.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
-        
-      
+        UIVidas = GameObject.FindGameObjectWithTag("UIVidas");
+        UIVidasAnimator = UIVidas.GetComponent<Animator>();
+        UIVidasText1 = GameObject.FindGameObjectWithTag("UIVidasText1").GetComponent<TMP_Text>();
+        UIVidasText2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<TMP_Text>();
+        UIVidasAnimator2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<Animator>();
         Debug.Log("Juego iniciado");
     }
 
@@ -158,7 +165,12 @@ public class GameManager : MonoBehaviour
         if (scriptJugador.getVulnerable() == false)
         {
             nVidas -= danyo;
+            UIVidasAnimator.SetTrigger("Baja");
+            UIVidasText1.text = nVidas.ToString();
+            UIVidasText2.text = (nVidas+1).ToString();
+            UIVidasAnimator2.SetTrigger("NumeroCae");
             scriptJugador.activarVulnerabilidad();
+           
             if (nVidas <= 0)
             {
                 Morir();
