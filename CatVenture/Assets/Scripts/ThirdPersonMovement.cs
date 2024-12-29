@@ -35,9 +35,12 @@ public class ThirdPersonMovement : MonoBehaviour
 
 
     //Ataque
-    public float attackRange = 1.5f; // La distancia al frente del jugador donde aparece la kill zone
-    public int attackDamage = 50; // Daño infligido a los enemigos
-    public LayerMask enemyLayer; // Layer de los enemigos para verificar colisiones
+    public float attackRange = 2f; // Rango del ataque
+    public float attackAngle = 45f; // Ángulo del ataque
+    public int attackDamage = 1; // Daño del ataque
+    public Transform attackPoint; // Punto desde donde se realiza el ataque
+    public float attackCooldown = 0.5f; // Tiempo de enfriamiento entre ataques
+
 
 
 
@@ -158,20 +161,42 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void Attack()
     {
-        // Crear la kill zone justo en frente del jugador
-        Vector2 position = transform.position + transform.right * attackRange; // Asume que el "frente" es hacia la derecha
+        // Inicia el cooldown del ataque
+        StartCoroutine(AttackCooldown());
 
-        // Detectar todos los enemigos en la kill zone usando un círculo de colisión
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(position, attackRange, enemyLayer);
+        // Obtiene todos los colliders en un radio del punto de ataque
+        Collider[] hitColliders = Physics.OverlapSphere(attackPoint.position, attackRange);
 
-
-        // Aplicar daño a cada enemigo en la zona
-        foreach (Collider2D enemy in hitEnemies)
+        foreach (Collider collider in hitColliders)
         {
-            //enemy.GetComponent<GenericEnemy>().TakeDamage(attackDamage);
+            // Verifica si el objeto tiene el tag "Enemy"
+            if (collider.CompareTag("Enemy"))
+            {
+                // Calcula la dirección hacia el enemigo
+                Vector3 directionToEnemy = collider.transform.position - transform.position;
+                directionToEnemy.y = 0; // Ignorar diferencia en altura
+
+                // Verifica si el enemigo está dentro del ángulo de ataque
+                if (Vector3.Angle(transform.forward, directionToEnemy) <= attackAngle)
+                {
+                    // Aplica daño al enemigo (se asume que el enemigo tiene un script con un método "TakeDamage")
+                    Enemy enemy = collider.GetComponent<Enemy>();
+                    if (enemy != null)
+                    {
+                        enemy.TakeDamage(attackDamage);
+                    }
+                }
+            }
         }
 
-        
+
+    }
+
+    IEnumerator AttackCooldown()
+    {
+        canAttack = false; // Desactiva la capacidad de atacar
+        yield return new WaitForSeconds(attackCooldown); // Espera el tiempo del cooldown
+        canAttack = true; // Reactiva la capacidad de atacar
     }
 
 

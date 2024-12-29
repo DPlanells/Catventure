@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3562963261504222039}
   - component: {fileID: 1301558134681209161}
   - component: {fileID: 5876888068930793212}
+  - component: {fileID: 931031554669720588}
   m_Layer: 0
   m_Name: EnemigoVolador
   m_TagString: Enemy
@@ -127,6 +128,19 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 24
+--- !u!114 &931031554669720588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3888045356812145594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82868f246d749fc4c8649f67205f64ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 2
 --- !u!1001 &8517206901474274763
 PrefabInstance:
   m_ObjectHideFlags: 0

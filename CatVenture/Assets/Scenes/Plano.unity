@@ -122,6 +122,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &356629607 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8850057537641171706, guid: 32431448dc3992549b85c3ec53b00f3e, type: 3}
+  m_PrefabInstance: {fileID: 1687769159}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &544332153
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,6 +382,24 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &1606095112 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5692874716979191357, guid: 7abf6c8bbe872fc42ba63ec2cf4f5837, type: 3}
+  m_PrefabInstance: {fileID: 1734681220}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1606095113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606095112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82868f246d749fc4c8649f67205f64ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 2
 --- !u!1 &1643208126
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,6 +559,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 544332156}
     - target: {fileID: 5201983597595686297, guid: 32431448dc3992549b85c3ec53b00f3e, type: 3}
+      propertyPath: attackPoint
+      value: 
+      objectReference: {fileID: 356629607}
+    - target: {fileID: 5201983597595686297, guid: 32431448dc3992549b85c3ec53b00f3e, type: 3}
+      propertyPath: attackDamage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201983597595686297, guid: 32431448dc3992549b85c3ec53b00f3e, type: 3}
       propertyPath: enemyLayer.m_Bits
       value: 128
       objectReference: {fileID: 0}
@@ -609,7 +640,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5692874716979191357, guid: 7abf6c8bbe872fc42ba63ec2cf4f5837, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1606095113}
   m_SourcePrefab: {fileID: 100100000, guid: 7abf6c8bbe872fc42ba63ec2cf4f5837, type: 3}
 --- !u!1 &2141455742 stripped
 GameObject:
