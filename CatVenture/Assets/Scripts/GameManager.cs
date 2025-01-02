@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     public Animator Order;
     private int nCroquetas;
 
-    private int nPescados;
+
 
     private GameObject player;
     private ThirdPersonMovement scriptJugador;
@@ -30,7 +30,11 @@ public class GameManager : MonoBehaviour
     private Animator UIVidasAnimator2;
 
 
-
+    //Guardado
+    private SaveManager saveManager;
+    private GameLoader loader;
+    private int slot;
+    private Vector3 checkpointPosition;
 
     private void Awake()
     {
@@ -66,7 +70,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        
+        saveManager = FindObjectOfType<SaveManager>();
+        loader = FindObjectOfType<GameLoader>();
+
+        //cargarPartida(slot);
         StartGame();
     }
 
@@ -76,7 +83,6 @@ public class GameManager : MonoBehaviour
         // Lógica para iniciar el juego
         nVidas = 7;
         nCroquetas = 0;
-        nPescados = 0;
         croquetas = GameObject.FindGameObjectWithTag("Cont").GetComponent<TMP_Text>();
         Order = GameObject.FindGameObjectWithTag("Order").GetComponent<Animator>();
         UIHabilidad = GameObject.FindGameObjectWithTag("UIHabilidad");
@@ -88,6 +94,21 @@ public class GameManager : MonoBehaviour
         UIVidasText2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<TMP_Text>();
         UIVidasAnimator2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<Animator>();
         Debug.Log("Juego iniciado");
+    }
+
+    public void retomarJuego()
+    {
+        croquetas = GameObject.FindGameObjectWithTag("Cont").GetComponent<TMP_Text>();
+        Order = GameObject.FindGameObjectWithTag("Order").GetComponent<Animator>();
+        UIHabilidad = GameObject.FindGameObjectWithTag("UIHabilidad");
+        UIAnimator = UIHabilidad.GetComponent<Animator>();
+        UIAText = UIHabilidad.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
+        UIVidas = GameObject.FindGameObjectWithTag("UIVidas");
+        UIVidasAnimator = UIVidas.GetComponent<Animator>();
+        UIVidasText1 = GameObject.FindGameObjectWithTag("UIVidasText1").GetComponent<TMP_Text>();
+        UIVidasText2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<TMP_Text>();
+        UIVidasAnimator2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<Animator>();
+        Debug.Log("Juego iniciado a partir del saveFile " + slot);
     }
 
     // Método para pausar el juego
@@ -193,6 +214,56 @@ public class GameManager : MonoBehaviour
         //Logica de finalizar una partida
         Debug.Log("Partida finalizada, jugador muerto");
     }
-    
+
+    public void SaveProgress(int slot)
+    {
+        SaveData data = new SaveData
+        {
+            lives = this.nVidas,
+            coins = this.nCroquetas,
+            canRun = scriptJugador.getRun(),
+            canJump = scriptJugador.getJump(),
+            canAttack = scriptJugador.getAttack(),
+            checkpointPosition = checkpointPosition
+        };
+
+        saveManager.SaveGame(data, slot);
+    }
+
+    public void setSlotGuardado(int slot)
+    {
+        this.slot = slot;
+    }
+
+    public void setCheckPoint(Vector3 position)
+    {
+        checkpointPosition = position;
+    }
+
+    public void cargarPartida(int slot)
+    {
+        SaveData datosPartida = loader.LoadProgress(slot);
+
+        if (datosPartida != null)
+        {
+            //Cargar los datos del save al manager
+            nVidas = datosPartida.lives;
+            nCroquetas = datosPartida.coins;
+
+            
+            scriptJugador.setRun(datosPartida.canRun);
+            scriptJugador.setJump(datosPartida.canJump);
+            scriptJugador.setAttack(datosPartida.canAttack);
+
+
+            scriptJugador.setPosicion(datosPartida.checkpointPosition);
+
+            retomarJuego();
+        }
+        else
+        {
+            StartGame();
+        }
+    }
 
 }

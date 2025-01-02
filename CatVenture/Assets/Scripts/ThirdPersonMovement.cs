@@ -51,7 +51,7 @@ public class ThirdPersonMovement : MonoBehaviour
     // Habilidades
     //public enum AbilityType { Correr, Saltar, Atacar }
     public bool canRun = false;
-    public bool canPerformJump = false;
+    public bool canJump = false;
     public bool canAttack = false;
 
 
@@ -124,7 +124,7 @@ public class ThirdPersonMovement : MonoBehaviour
         }
 
         // Salto
-        if (isGrounded && Input.GetButtonDown("Jump") && canPerformJump)  // Solo salta si tiene la habilidad de Saltar
+        if (isGrounded && Input.GetButtonDown("Jump") && canJump)  // Solo salta si tiene la habilidad de Saltar
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             isDancing = false;
@@ -237,7 +237,7 @@ public class ThirdPersonMovement : MonoBehaviour
                 canRun = true;
                 break;
             case AbilityType.Saltar:
-                canPerformJump = true;
+                canJump = true;
                 break;
             case AbilityType.Atacar:
                 canAttack = true;
@@ -246,7 +246,35 @@ public class ThirdPersonMovement : MonoBehaviour
         Debug.Log("Habilidad adquirida: " + ability);
     }
 
+    public void setRun(bool run)
+    {
+        canRun = run;
+    }
 
+    public void setJump(bool jump)
+    {
+        canJump = jump;
+    }
+
+    public void setAttack(bool attack)
+    {
+        canAttack = attack;
+    }
+
+    public bool getRun()
+    {
+        return canRun;
+    }
+
+    public bool getJump()
+    {
+        return canJump;
+    }
+
+    public bool getAttack()
+    {
+        return canAttack;
+    }
 
     public void activarVulnerabilidad()
     {
@@ -270,6 +298,11 @@ public class ThirdPersonMovement : MonoBehaviour
         return isInvulnerable;
     }
 
+    public void setPosicion(Vector3 posicion)
+    {
+        transform.position = posicion;
+    }
+
 
 
     private void OnCollisionEnter(Collision collision)
@@ -283,6 +316,8 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         
     }
+
+    
 
 
 
