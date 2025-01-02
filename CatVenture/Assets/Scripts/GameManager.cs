@@ -130,8 +130,9 @@ public class GameManager : MonoBehaviour
     // Método para finalizar el juego
     public void EndGame()
     {
-        // Lógica para finalizar el juego
         Debug.Log("Juego terminado");
+
+        //TODO Logica para volver al menú principal
     }
 
     public void sumarCroqueta()
@@ -211,8 +212,9 @@ public class GameManager : MonoBehaviour
 
     private void Morir()
     {
-        //Logica de finalizar una partida
         Debug.Log("Partida finalizada, jugador muerto");
+
+        //TODO Menu para volver al menu principal, o reiniciar desde el último punto de guardado
     }
 
     public void SaveProgress(int slot)
@@ -224,6 +226,7 @@ public class GameManager : MonoBehaviour
             canRun = scriptJugador.getRun(),
             canJump = scriptJugador.getJump(),
             canAttack = scriptJugador.getAttack(),
+            canLaunch = scriptJugador.getLaunch(),
             checkpointPosition = checkpointPosition
         };
 
@@ -254,6 +257,7 @@ public class GameManager : MonoBehaviour
             scriptJugador.setRun(datosPartida.canRun);
             scriptJugador.setJump(datosPartida.canJump);
             scriptJugador.setAttack(datosPartida.canAttack);
+            scriptJugador.setLaunch(datosPartida.canLaunch);
 
 
             scriptJugador.setPosicion(datosPartida.checkpointPosition);

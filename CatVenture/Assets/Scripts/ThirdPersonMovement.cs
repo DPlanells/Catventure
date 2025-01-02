@@ -53,7 +53,14 @@ public class ThirdPersonMovement : MonoBehaviour
     public bool canRun = false;
     public bool canJump = false;
     public bool canAttack = false;
+    public bool canLaunch = false;
 
+
+    // Lanzarse
+    private float launchDuration = 1f; // Duración máxima de la acción de lanzarse
+    private float launchAngle = 0f; // Ángulo hacia abajo en grados
+    private bool isLaunching = false;
+    private float launchTimeRemaining;
 
     //Tiempo de invulnerabilidad
     public float invulnerabilityDuration = 2f; // Duración de la invulnerabilidad en segundos
@@ -70,6 +77,7 @@ public class ThirdPersonMovement : MonoBehaviour
     {
         ManejarMovimiento();
         ManejarAtaque();
+        ManejarLanzarse();
         // Animación
         UpdateAnimationParameters(direction, currentSpeed);
 
@@ -81,8 +89,8 @@ public class ThirdPersonMovement : MonoBehaviour
     }
     private void ManejarMovimiento()
     {
-        
-       
+        if (isLaunching) return; // No manejar movimiento normal si está lanzándose
+
         // Reiniciar la velocidad en Y cuando toca el suelo
         if (isGrounded && velocity.y < 0)
         {
@@ -200,6 +208,51 @@ public class ThirdPersonMovement : MonoBehaviour
     }
 
 
+    private void ManejarLanzarse()
+    {
+        if (Input.GetKeyDown(KeyCode.N) && !isGrounded && !isLaunching && canLaunch)
+        {
+            isLaunching = true;
+            launchTimeRemaining = launchDuration;
+
+            // Calcular dirección del lanzamiento (20º hacia abajo desde la orientación actual)
+            Vector3 launchDirection = Quaternion.Euler(-launchAngle, 0f, 0f) * transform.forward;
+
+            // Aplicar impulso inicial
+            velocity.y = 0; // Reiniciar cualquier velocidad vertical previa
+            horizontalVelocity = launchDirection.normalized * runSpeed;
+        }
+
+        if (isLaunching)
+        {
+            // Reducir el tiempo restante del lanzamiento
+            launchTimeRemaining -= Time.deltaTime;
+
+            // Mover al jugador en la dirección calculada
+            controller.Move(horizontalVelocity * Time.deltaTime);
+
+            // Gradualmente reducir la velocidad horizontal
+            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.deltaTime / launchDuration);
+
+            // Terminar el lanzamiento si se acaba el tiempo
+            if (launchTimeRemaining <= 0f)
+            {
+                TerminarLanzarse();
+            }
+        }
+    }
+
+    private void TerminarLanzarse()
+    {
+        isLaunching = false;
+
+        // Mantener la velocidad horizontal restante para movimiento en el aire
+        if (!isGrounded)
+        {
+            velocity.y = 0; // Reiniciar la velocidad vertical para permitir caída normal
+        }
+    }
+
 
 
 
@@ -261,6 +314,11 @@ public class ThirdPersonMovement : MonoBehaviour
         canAttack = attack;
     }
 
+    public void setLaunch(bool launch)
+    {
+        canLaunch = launch;
+    }
+
     public bool getRun()
     {
         return canRun;
@@ -274,6 +332,11 @@ public class ThirdPersonMovement : MonoBehaviour
     public bool getAttack()
     {
         return canAttack;
+    }
+
+    public bool getLaunch()
+    {
+        return canLaunch;
     }
 
     public void activarVulnerabilidad()
