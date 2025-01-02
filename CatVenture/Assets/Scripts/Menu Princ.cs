@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,10 +14,14 @@ public class MenuPrinc : MonoBehaviour
     public Animator MUIChild4;
     public Canvas MUI;
     public Canvas CredUI;
+    public Canvas CargarUI;
     public Animator CredAnim;
     public Animator BotonVolver;
     public Button IniciarBoton;
     public Button VolverBoton;
+    public Animator Partida1;
+    public Animator Partida2;
+    public Animator Partida3;
     int tiempo;
 
     private void Start()
@@ -24,10 +29,11 @@ public class MenuPrinc : MonoBehaviour
         MCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Animator>();
         MUI = GameObject.FindGameObjectWithTag("MainMenu").GetComponent<Canvas>();
         CredUI = GameObject.FindGameObjectWithTag("Creditos").GetComponent<Canvas>();
+        CargarUI = GameObject.FindGameObjectWithTag("Cargar").GetComponent<Canvas>();
 
-        
         MCamera.SetBool("Creditos", false);
         CredUI.enabled = false;
+        CargarUI.enabled = false;
 
     }
 
@@ -69,13 +75,19 @@ public class MenuPrinc : MonoBehaviour
     }
     public void CargarPartida()
     {
-        Debug.Log(MCamera.gameObject);
+        MCamera.SetBool("Cargar", true);
+        CargarUI.enabled = true;
+        CredUI.enabled = false;
+        MUI.enabled = false;
         MCamera.Play("Continuar");
+        Partida1.SetTrigger("trns");
+        Partida2.SetTrigger("trns");
+        Partida3.SetTrigger("trns");
     }
     public void Creditos()
     {
         Debug.Log(MCamera.gameObject);
-        
+        CargarUI.enabled = false;
         MUI.enabled = false;
         MCamera.SetBool("Creditos", true);
         CredUI.enabled = true;
@@ -86,10 +98,18 @@ public class MenuPrinc : MonoBehaviour
     }
     public void VolverPrincipal()
     {
-        MCamera.SetBool("Creditos", false);
-        CredAnim.SetTrigger("creditosvolver");
-        CredUI.enabled = false;
-        Debug.Log(MUIChild2);
+
+        if (CredUI.enabled)
+        {
+            MCamera.SetBool("Creditos", false);
+            CredAnim.SetTrigger("creditosvolver");
+            CredUI.enabled = false;
+        }
+        else if (CargarUI.enabled)
+        {
+            MCamera.SetBool("Cargar", false);
+            CargarUI.enabled = false;
+        }
         MUIChild2.SetTrigger("trns");
         MUIChild3.SetTrigger("trns");
         MUIChild4.SetTrigger("trns");
