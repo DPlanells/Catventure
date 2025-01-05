@@ -4,6 +4,7 @@ using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,14 +29,14 @@ public class GameManager : MonoBehaviour
     private TMP_Text UIVidasText1;
     private TMP_Text UIVidasText2;
     private Animator UIVidasAnimator2;
-
-
+    public GameObject panelPausa;
+    public Animator TextoPausa;
     //Guardado
     private SaveManager saveManager;
     private GameLoader loader;
     private int slot;
     private Vector3 checkpointPosition;
-
+    private Boolean pausado;
     private void Awake()
     {
         // Implementación del patrón Singleton
@@ -74,6 +75,9 @@ public class GameManager : MonoBehaviour
         loader = FindObjectOfType<GameLoader>();
 
         //cargarPartida(slot);
+        pausado = false;
+        panelPausa.SetActive(pausado);
+    
         StartGame();
     }
 
@@ -96,6 +100,14 @@ public class GameManager : MonoBehaviour
         Debug.Log("Juego iniciado");
     }
 
+    void Update() {
+
+        if (Input.GetKeyDown(KeyCode.Escape)) { 
+            if(!pausado)
+                PauseGame();
+            else ResumeGame();
+        }
+    }
     public void retomarJuego()
     {
         croquetas = GameObject.FindGameObjectWithTag("Cont").GetComponent<TMP_Text>();
@@ -117,6 +129,11 @@ public class GameManager : MonoBehaviour
         // Lógica para pausar el juego
         Time.timeScale = 0;  // Pausar el tiempo
         Debug.Log("Juego pausado");
+        pausado = true;
+        panelPausa.SetActive(true);
+        UIVidasAnimator.SetTrigger("Baja");
+        Order.SetTrigger("Baja");
+        TextoPausa.SetTrigger("Pausado");
     }
 
     // Método para reanudar el juego
@@ -125,6 +142,11 @@ public class GameManager : MonoBehaviour
         // Lógica para reanudar el juego
         Time.timeScale = 1;  // Reanudar el tiempo
         Debug.Log("Juego reanudado");
+        pausado = false;
+        UIVidasAnimator.SetTrigger("Sube");
+        Order.SetTrigger("Sube");
+        TextoPausa.SetTrigger("Despausado");
+        panelPausa.SetActive(false);
     }
 
     // Método para finalizar el juego
