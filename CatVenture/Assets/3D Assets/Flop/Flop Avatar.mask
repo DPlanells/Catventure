@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Flop Avatar
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Body__mBody
+    m_Weight: 1
+  - m_Path: Body__mCapVis
+    m_Weight: 1
+  - m_Path: Body__mEye
+    m_Weight: 1
+  - m_Path: Body__mMouth
+    m_Weight: 1
+  - m_Path: CatShirt__OnePieceH
+    m_Weight: 1
+  - m_Path: CatShirt__OnePieceL
+    m_Weight: 1
+  - m_Path: CatShirt__OnePieceN
+    m_Weight: 1
+  - m_Path: CatShirt__TshirtsH
+    m_Weight: 1
+  - m_Path: CatShirt__TshirtsL
+    m_Weight: 1
+  - m_Path: CatShirt_TshirtsN
+    m_Weight: 1
+  - m_Path: Root
+    m_Weight: 1
+  - m_Path: Root/Trans_Root
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Skirt_LF
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Skirt_RF
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Skirt_LB
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Skirt_LC
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Skirt_RB
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Skirt_RC
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_L/Arm_1_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_L/Arm_1_L/Arm_1_L_Sub
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_L/Arm_1_L/Arm_1_L_Sub/Arm_2_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_L/Arm_1_L/Arm_1_L_Sub/Arm_2_L/Wrist_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_L/Arm_1_L/Arm_1_L_Sub/Arm_2_L/Wrist_L/Hand_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_L/Arm_1_L/Arm_1_L_Sub/Arm_2_L/Wrist_L_Sub
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_R/Arm_1_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_R/Arm_1_R/Arm_1_R_Sub
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_R/Arm_1_R/Arm_1_R_Sub/Arm_2_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_R/Arm_1_R/Arm_1_R_Sub/Arm_2_R/Wrist_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_R/Arm_1_R/Arm_1_R_Sub/Arm_2_R/Wrist_R/Hand_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Clavicle_R/Arm_1_R/Arm_1_R_Sub/Arm_2_R/Wrist_R_Sub
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Neck
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Neck/Head
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Neck/Head/Ear_1_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Neck/Head/Ear_1_L/Z_Ear_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Neck/Head/Ear_1_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Neck/Head/Ear_1_R/Z_Ear_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Spine_1/Spine_2/Spine_3/Neck/Head/Feel
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_L/Leg_1_L_Sub
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_L/Leg_1_L_Sub/Leg_2_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_L/Leg_1_L_Sub/Leg_2_L/Leg_2_L_Sub
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_L/Leg_1_L_Sub/Leg_2_L/Leg_2_L_Sub/Ankle_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_L/Leg_1_L_Sub/Leg_2_L/Leg_2_L_Sub/Ankle_L/Toe_L
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_R/Leg_1_R_Sub
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_R/Leg_1_R_Sub/Leg_2_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_R/Leg_1_R_Sub/Leg_2_R/Leg_2_R_Sub
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_R/Leg_1_R_Sub/Leg_2_R/Leg_2_R_Sub/Ankle_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/Leg_1_R/Leg_1_R_Sub/Leg_2_R/Leg_2_R_Sub/Ankle_R/Toe_R
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/TailRoot
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/TailRoot/S_Tail_1
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/TailRoot/S_Tail_1/S_Tail_2
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/TailRoot/S_Tail_1/S_Tail_2/S_Tail_3
+    m_Weight: 1
+  - m_Path: Root/Trans_Root/Skl_Root/Waist/TailRoot/S_Tail_1/S_Tail_2/S_Tail_3/Z_S_Tail
+    m_Weight: 1
