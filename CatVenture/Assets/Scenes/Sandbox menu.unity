@@ -184,7 +184,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Archivo 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 45208e3c227bd8744973953b64e7e23c, type: 2}
   m_sharedMaterial: {fileID: -4643471969200200298, guid: 45208e3c227bd8744973953b64e7e23c, type: 2}
@@ -6537,7 +6537,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 583029467}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1524748530}
+        m_TargetAssemblyTypeName: MenuPrinc, Assembly-CSharp
+        m_MethodName: SeleccionarSlot
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &583029467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7900,7 +7912,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Archivo 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 45208e3c227bd8744973953b64e7e23c, type: 2}
   m_sharedMaterial: {fileID: -4643471969200200298, guid: 45208e3c227bd8744973953b64e7e23c, type: 2}
@@ -8286,6 +8298,44 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8505429282924986080, guid: 11e3612d3f8c37144a094049eced224e, type: 3}
   m_PrefabInstance: {fileID: 1850749387}
   m_PrefabAsset: {fileID: 0}
+--- !u!84 &1158480173
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WaterDepthMap
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 5
+  m_Width: 1024
+  m_Height: 1024
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &1224507339
 GameObject:
   m_ObjectHideFlags: 0
@@ -9201,7 +9251,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1273507733}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1524748530}
+        m_TargetAssemblyTypeName: MenuPrinc, Assembly-CSharp
+        m_MethodName: SeleccionarSlot
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1273507733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9529,7 +9591,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Archivo 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 45208e3c227bd8744973953b64e7e23c, type: 2}
   m_sharedMaterial: {fileID: -4643471969200200298, guid: 45208e3c227bd8744973953b64e7e23c, type: 2}
@@ -11109,44 +11171,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1591578158}
   m_CullTransparentMesh: 1
---- !u!84 &1616390536
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: WaterDepthMap
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 5
-  m_Width: 1024
-  m_Height: 1024
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &1658958111
 GameObject:
   m_ObjectHideFlags: 0
@@ -11210,7 +11234,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1658958113}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1524748530}
+        m_TargetAssemblyTypeName: MenuPrinc, Assembly-CSharp
+        m_MethodName: SeleccionarSlot
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1658958113
 MonoBehaviour:
   m_ObjectHideFlags: 0

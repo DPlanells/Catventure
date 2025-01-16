@@ -23,6 +23,9 @@ public class MenuPrinc : MonoBehaviour
     public Animator Partida2;
     public Animator Partida3;
     int tiempo;
+    private int Slot = 1;
+
+
 
     private void Start()
     {
@@ -35,6 +38,19 @@ public class MenuPrinc : MonoBehaviour
         CredUI.enabled = false;
         CargarUI.enabled = false;
 
+
+    }
+
+    public void SeleccionarSlot(int slot)
+    {
+        Slot = slot;
+
+        // Guarda el slot seleccionado temporalmente en PlayerPrefs o en un singleton temporal
+        PlayerPrefs.SetInt("SlotSeleccionado", Slot);
+        PlayerPrefs.Save();
+
+        // Cambia a la escena principal
+        SceneManager.LoadScene("MainScene");
     }
 
     public void Update() {
@@ -60,7 +76,7 @@ public class MenuPrinc : MonoBehaviour
         yield return new WaitForSeconds(tiempo/2);
         MUI.enabled = false;
         yield return new WaitForSeconds(tiempo);
-        SceneManager.LoadScene("MainScene");
+        SeleccionarSlot(Slot);
 
     }
 

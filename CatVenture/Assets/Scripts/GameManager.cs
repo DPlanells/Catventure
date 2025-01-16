@@ -71,13 +71,27 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        // Recuperar el slot seleccionado
+        if (PlayerPrefs.HasKey("SlotSeleccionado"))
+        {
+            slot = PlayerPrefs.GetInt("SlotSeleccionado");
+            cargarPartida(slot); // Carga la partida automáticamente
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró un slot seleccionado.");
+        }
+
         saveManager = FindObjectOfType<SaveManager>();
         loader = FindObjectOfType<GameLoader>();
 
-        //cargarPartida(slot);
+        cargarPartida(slot);
+
+
         pausado = false;
-        panelPausa.SetActive(pausado);
-    
+        Time.timeScale = 1;  // Asegurarse de que el tiempo esté en marcha
+        panelPausa.SetActive(false);
+
         StartGame();
     }
 
@@ -126,6 +140,8 @@ public class GameManager : MonoBehaviour
     // Método para pausar el juego
     public void PauseGame()
     {
+        if (pausado) return; // Evitar múltiples pausas
+
         // Lógica para pausar el juego
         Time.timeScale = 0;  // Pausar el tiempo
         Debug.Log("Juego pausado");
@@ -139,6 +155,8 @@ public class GameManager : MonoBehaviour
     // Método para reanudar el juego
     public void ResumeGame()
     {
+        if (!pausado) return; // Evitar reanudar si no está pausado
+
         // Lógica para reanudar el juego
         Time.timeScale = 1;  // Reanudar el tiempo
         Debug.Log("Juego reanudado");
@@ -290,6 +308,11 @@ public class GameManager : MonoBehaviour
         {
             StartGame();
         }
+
+        // Asegurar que el juego no quede pausado
+        Time.timeScale = 1;
+        pausado = false;
+        panelPausa.SetActive(false);
     }
 
 }
