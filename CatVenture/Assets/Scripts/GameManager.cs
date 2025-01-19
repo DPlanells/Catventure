@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     private GameObject player;
     private ThirdPersonMovement scriptJugador;
     private GameObject UIHabilidad;
-    private GameObject UIVidas;
+    public GameObject UIVidas;
     private Animator UIAnimator;
     private Animator UIVidasAnimator;
     private TMP_Text UIAText;
@@ -181,6 +181,7 @@ public class GameManager : MonoBehaviour
         Order.Play("OrderBaja");
         croquetas.text =nCroquetas.ToString();
         Debug.Log("Croquetas recogidas = " + nCroquetas);
+        Order.SetTrigger("Sube");
     }
 
     //Añade una habilidad nueva al jugador
@@ -232,7 +233,8 @@ public class GameManager : MonoBehaviour
             UIVidasText2.text = (nVidas+1).ToString();
             UIVidasAnimator2.SetTrigger("NumeroCae");
             scriptJugador.activarVulnerabilidad();
-           
+            UIVidasAnimator.SetTrigger("Sube");
+
             if (nVidas <= 0)
             {
                 Morir();
@@ -285,8 +287,9 @@ public class GameManager : MonoBehaviour
 
     public void cargarPartida(int slot)
     {
-        SaveData datosPartida = loader.LoadProgress(slot);
-
+        StartGame();
+        //SaveData datosPartida = loader.LoadProgress(slot);
+        SaveData datosPartida = new SaveData();
         if (datosPartida != null)
         {
             //Cargar los datos del save al manager
@@ -298,9 +301,6 @@ public class GameManager : MonoBehaviour
             scriptJugador.setJump(datosPartida.canJump);
             scriptJugador.setAttack(datosPartida.canAttack);
             scriptJugador.setLaunch(datosPartida.canLaunch);
-
-
-            scriptJugador.setPosicion(datosPartida.checkpointPosition);
 
             retomarJuego();
         }
