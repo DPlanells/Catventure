@@ -136,4 +136,19 @@ public class MenuPrinc : MonoBehaviour
     {
         Application.Quit();
     }
+
+    private SaveData getInfoSlot(int slot)
+    {
+        SaveManager saveManager = GameObject.FindObjectOfType<SaveManager>();
+        if (saveManager == null)
+        {
+            Debug.Log("No se ha encontrado el componente saveManager");
+            return null;
+        }
+        else
+        {
+            SaveData info = saveManager.LoadGame(slot);
+            return info;
+        }
+    }
 }
