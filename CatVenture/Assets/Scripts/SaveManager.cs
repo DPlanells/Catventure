@@ -6,13 +6,28 @@ public class SaveManager : MonoBehaviour
     private const int MaxSaveSlots = 3;
     private string saveFolderPath;
 
+
     private void Awake()
     {
-        saveFolderPath = Application.persistentDataPath + "/Saves";
-        if (!Directory.Exists(saveFolderPath))
+        InitializeSaveFolderPath();
+    }
+
+    private void InitializeSaveFolderPath()
+    {
+        if (string.IsNullOrEmpty(saveFolderPath))
         {
-            Directory.CreateDirectory(saveFolderPath);
+            saveFolderPath = Application.persistentDataPath + "/Saves";
+            if (!Directory.Exists(saveFolderPath))
+            {
+                Directory.CreateDirectory(saveFolderPath);
+            }
         }
+    }
+
+    private string GetSaveFilePath(int slot)
+    {
+        InitializeSaveFolderPath(); // Asegurar que la ruta esté inicializada
+        return Path.Combine(saveFolderPath, $"save_slot_{slot}.json");
     }
 
     public void SaveGame(SaveData data, int slot)
@@ -28,6 +43,8 @@ public class SaveManager : MonoBehaviour
         File.WriteAllText(filePath, jsonData);
         Debug.Log("Juego guardado en el slot " + slot);
     }
+
+
 
     public SaveData LoadGame(int slot)
     {
@@ -56,8 +73,4 @@ public class SaveManager : MonoBehaviour
         return File.Exists(GetSaveFilePath(slot));
     }
 
-    private string GetSaveFilePath(int slot)
-    {
-        return Path.Combine(saveFolderPath, $"save_slot_{slot}.json");
-    }
 }
