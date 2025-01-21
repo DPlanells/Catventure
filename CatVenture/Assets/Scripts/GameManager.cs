@@ -192,9 +192,10 @@ public class GameManager : MonoBehaviour
         }
 
         // El resto de la lógica del Update...
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetButtonDown("Pause"))
         {
             if (!pausado) PauseGame();
+
             else ResumeGame();
         }
     }

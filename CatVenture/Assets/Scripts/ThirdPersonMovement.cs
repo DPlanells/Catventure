@@ -13,7 +13,7 @@ public class ThirdPersonMovement : MonoBehaviour
     public static float walkSpeed = 6f;  // Velocidad normal
     private static float specialRunMultiplier = 2f;  // Multiplicador de velocidad especial para habilidad Correr
     public float runSpeed = walkSpeed * specialRunMultiplier;  // Velocidad al correr
-    private float currentSpeed;
+    public float currentSpeed;
 
     private Vector3 direction;
 
@@ -32,6 +32,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
     bool isGrounded;
     bool isDancing;
+    bool isAttacking;
     bool hasDoubleJumped;
 
 
@@ -110,14 +111,15 @@ public class ThirdPersonMovement : MonoBehaviour
         currentSpeed = walkSpeed;
         if (isGrounded)
         {
-            if (Input.GetKey(KeyCode.LeftShift) && canRun)
+            if (Input.GetButton("Run") && canRun)
             {
-                currentSpeed = walkSpeed * specialRunMultiplier;
+                currentSpeed = runSpeed;
             }
             else
             {
                 currentSpeed = walkSpeed;
             }
+           
         }
 
         if (isGrounded && direction.magnitude >= 0.1f)
@@ -173,9 +175,10 @@ public class ThirdPersonMovement : MonoBehaviour
     private void ManejarAtaque()
     {
         // Habilidad de ataque
-        if (canAttack && Input.GetKeyDown(KeyCode.J))
+        if (canAttack && Input.GetButtonDown("Attack"))
         {
             Attack();
+            isAttacking = true;
         }
     }
 
@@ -215,15 +218,17 @@ public class ThirdPersonMovement : MonoBehaviour
 
     IEnumerator AttackCooldown()
     {
+        isAttacking = true;
         canAttack = false; // Desactiva la capacidad de atacar
         yield return new WaitForSeconds(attackCooldown); // Espera el tiempo del cooldown
         canAttack = true; // Reactiva la capacidad de atacar
+        isAttacking = false;
     }
 
 
     private void ManejarLanzarse()
     {
-        if (Input.GetKeyDown(KeyCode.N) && !isGrounded && !isLaunching && canLaunch)
+        if (Input.GetButtonDown("Dive") && !isGrounded && !isLaunching && canLaunch)
         {
             isLaunching = true;
             launchTimeRemaining = launchDuration;
@@ -290,6 +295,10 @@ public class ThirdPersonMovement : MonoBehaviour
         anim.SetBool("onGround", isGrounded);
 
         anim.SetBool("Dance", isDancing);
+
+        anim.SetBool("Attack", isAttacking);
+
+        anim.SetBool("Launching", isLaunching);
     }
 
 
@@ -307,6 +316,9 @@ public class ThirdPersonMovement : MonoBehaviour
                 break;
             case AbilityType.Atacar:
                 canAttack = true;
+                break;
+            case AbilityType.Lanzarse:
+                canLaunch = true;
                 break;
         }
         Debug.Log("Habilidad adquirida: " + ability);
