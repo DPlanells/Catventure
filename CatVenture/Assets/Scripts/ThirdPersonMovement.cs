@@ -317,6 +317,9 @@ public class ThirdPersonMovement : MonoBehaviour
             case AbilityType.Atacar:
                 canAttack = true;
                 break;
+            case AbilityType.Lanzarse:
+                canLaunch = true;
+                break;
         }
         Debug.Log("Habilidad adquirida: " + ability);
     }
