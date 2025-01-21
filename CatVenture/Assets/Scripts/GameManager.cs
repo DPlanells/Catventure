@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     // Singleton instance
     public static GameManager instance;
 
+    private bool isInitialized = false;
+
     private int nVidas;
     public TMP_Text croquetas;
     public Animator Order;
@@ -30,168 +32,293 @@ public class GameManager : MonoBehaviour
     private TMP_Text UIVidasText1;
     private TMP_Text UIVidasText2;
     private Animator UIVidasAnimator2;
-    public GameObject panelPausa;
-    public Animator TextoPausa;
+    private GameObject panelPausa;
+    private Animator TextoPausa;
     //Guardado
     private SaveManager saveManager;
     private GameLoader loader;
     private int slot;
     private Vector3 checkpointPosition;
     private Boolean pausado;
+
+    private bool uiInitialized = false;
+    private bool needsUIUpdate = false;
+
+
     private void Awake()
     {
-        // Implementación del patrón Singleton
+        // Singleton setup
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);  // No destruir al cambiar de escena
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject);  // Si ya hay una instancia, destruir la nueva
+            Destroy(gameObject);
+            return;
         }
 
-        slot = 1;
+        // Registrar para eventos de escena
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
-        // Intentar encontrar al jugador automáticamente si no está asignado
-        if (player == null)
+    private void Start()
+    {
+        // Inicialización básica del juego
+        nVidas = 7;
+        nCroquetas = 0;
+
+        // Registramos un callback para cuando la escena termine de cargar
+        //SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Reset estado
+        isInitialized = false;
+
+        // Solo proceder si estamos en la escena del juego
+        if (scene.name == "MainScene") // Ajusta al nombre de tu escena
         {
-            player = GameObject.FindGameObjectWithTag("Player");
-            if (player == null)
-            {
-                Debug.LogWarning("No se encontró un objeto con la etiqueta 'Player' en la escena.");
-            }
-
-            
+            StartCoroutine(InitializeGameState());
         }
+        else
+        {
+            if (panelPausa != null)
+            {
+                panelPausa.SetActive(false); // Asegurar que el panel de pausa esté desactivado
+            }
+            pausado = false; // Reiniciar estado de pausa
+            Time.timeScale = 1; // Asegurar que el tiempo esté corriendo
+        }
+    }
 
+    private IEnumerator InitializeGameState()
+    {
+        // Esperar un frame para asegurar que todos los objetos estén en la escena
+        yield return null;
+
+        // Inicializar managers
+        saveManager = FindObjectOfType<SaveManager>();
+        loader = FindObjectOfType<GameLoader>();
+
+        // Encontrar al jugador
+        player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             scriptJugador = player.GetComponent<ThirdPersonMovement>();
-            if (scriptJugador == null)
+        }
+
+        // Inicializar UI
+        if (InitializeUIComponents())
+        {
+            // Cargar datos o iniciar nueva partida
+            if (PlayerPrefs.HasKey("SlotSeleccionado"))
             {
-                Debug.LogError("El objeto del jugador no tiene un componente ThirdPersonMovement.");
+                slot = PlayerPrefs.GetInt("SlotSeleccionado");
+                if (saveManager != null && saveManager.SaveSlotExists(slot))
+                {
+                    LoadGameData(slot);
+                }
+                else
+                {
+                    StartNewGame();
+                }
             }
-        }
+            else
+            {
+                StartNewGame();
+            }
 
-        saveManager = FindObjectOfType<SaveManager>();
-        if (saveManager == null)
-        {
-            Debug.LogError("SaveManager no encontrado en la escena.");
-            return;
-        }
-
-        loader = FindObjectOfType<GameLoader>();
-        if (loader == null)
-        {
-            Debug.LogError("GameLoader no encontrado en la escena.");
-            return;
-        }
-
-        // Recuperar el slot seleccionado
-        if (PlayerPrefs.HasKey("SlotSeleccionado"))
-        {
-            slot = PlayerPrefs.GetInt("SlotSeleccionado");
-            Debug.Log("Intentando cargar una partida");
-            cargarPartida(slot); // Carga la partida automáticamente
+            isInitialized = true;
         }
         else
         {
-            Debug.LogWarning("No se encontró un slot seleccionado.");
+            Debug.LogError("Fallo al inicializar componentes UI");
         }
-        loader = FindObjectOfType<GameLoader>();
-
-
-
-
-        pausado = false;
-        Time.timeScale = 1;  // Asegurarse de que el tiempo esté en marcha
-
-        if (panelPausa != null)
-        {
-            panelPausa.SetActive(false); // Desactiva el panel desde el inicio
-        }
-
-        StartGame();
     }
 
-    // Método para iniciar el juego
-    public void StartGame()
+    private bool InitializeUIComponents()
     {
-        // Lógica para iniciar el juego
-        nVidas = 7;
-        nCroquetas = 0;
-        croquetas = GameObject.FindGameObjectWithTag("Cont").GetComponent<TMP_Text>();
-        Order = GameObject.FindGameObjectWithTag("Order").GetComponent<Animator>();
-        UIHabilidad = GameObject.FindGameObjectWithTag("UIHabilidad");
-        UIAnimator= UIHabilidad.GetComponent<Animator>();
-        UIAText = UIHabilidad.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
-        UIVidas = GameObject.FindGameObjectWithTag("UIVidas");
-        UIVidasAnimator = UIVidas.GetComponent<Animator>();
-        UIVidasText1 = GameObject.FindGameObjectWithTag("UIVidasText1").GetComponent<TMP_Text>();
-        UIVidasText2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<TMP_Text>();
-        UIVidasAnimator2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<Animator>();
-        Debug.Log("Juego iniciado");
+        try
+        {
+            panelPausa = GameObject.Find("Panel Pausa");
+            TextoPausa = GameObject.FindGameObjectWithTag("TextoPausa")?.GetComponent<Animator>();
+
+            croquetas = GameObject.FindGameObjectWithTag("Cont")?.GetComponent<TMP_Text>();
+            Order = GameObject.FindGameObjectWithTag("Order")?.GetComponent<Animator>();
+            UIHabilidad = GameObject.FindGameObjectWithTag("UIHabilidad");
+            UIVidas = GameObject.FindGameObjectWithTag("UIVidas");
+            UIVidasText1 = GameObject.FindGameObjectWithTag("UIVidasText1")?.GetComponent<TMP_Text>();
+            UIVidasText2 = GameObject.FindGameObjectWithTag("UIVidasText2")?.GetComponent<TMP_Text>();
+
+            if (UIHabilidad != null)
+            {
+                UIAnimator = UIHabilidad.GetComponent<Animator>();
+                UIAText = UIHabilidad.transform.GetChild(0).GetComponent<TMP_Text>();
+            }
+
+            if (UIVidas != null)
+            {
+                UIVidasAnimator = UIVidas.GetComponent<Animator>();
+                UIVidasAnimator2 = GameObject.FindGameObjectWithTag("UIVidasText2")?.GetComponent<Animator>();
+            }
+
+            return ValidateUIComponents();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error inicializando UI: {e.Message}");
+            return false;
+        }
     }
 
-    void Update() {
+    private bool ValidateUIComponents()
+    {
+        return croquetas != null && Order != null && UIHabilidad != null && UIVidas != null &&
+               UIVidasText1 != null && UIVidasText2 != null && UIAnimator != null &&
+               UIVidasAnimator != null && UIAText != null && UIVidasAnimator2 != null;
+    }
 
-        if (Input.GetKeyDown(KeyCode.Escape)) { 
-            if(!pausado)
-                PauseGame();
+
+    // 2. Sistema de polling para asegurar la inicialización de UI
+    private void Update()
+    {
+        // Si necesitamos actualizar la UI y aún no está inicializada, intentamos de nuevo
+        if (needsUIUpdate && !uiInitialized)
+        {
+            InitializeUIComponents();
+        }
+
+        // El resto de la lógica del Update...
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!pausado) PauseGame();
             else ResumeGame();
         }
     }
-    public void retomarJuego()
+
+    
+
+    private void StartNewGame()
     {
-        croquetas = GameObject.FindGameObjectWithTag("Cont").GetComponent<TMP_Text>();
-        Order = GameObject.FindGameObjectWithTag("Order").GetComponent<Animator>();
-        UIHabilidad = GameObject.FindGameObjectWithTag("UIHabilidad");
-        UIAnimator = UIHabilidad.GetComponent<Animator>();
-        UIAText = UIHabilidad.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
-        UIVidas = GameObject.FindGameObjectWithTag("UIVidas");
-        UIVidasAnimator = UIVidas.GetComponent<Animator>();
-        UIVidasText1 = GameObject.FindGameObjectWithTag("UIVidasText1").GetComponent<TMP_Text>();
-        UIVidasText2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<TMP_Text>();
-        UIVidasAnimator2 = GameObject.FindGameObjectWithTag("UIVidasText2").GetComponent<Animator>();
-        Debug.Log("Juego iniciado a partir del saveFile " + slot);
+        nVidas = 7;
+        nCroquetas = 0;
+        pausado = false;
+        Time.timeScale = 1;
+
+        if (panelPausa != null)
+        {
+            panelPausa.SetActive(false);
+        }
+
+        UpdateUIValues();
+        Debug.Log("Nueva partida iniciada");
     }
+
+    private void LoadGameData(int slotToLoad)
+    {
+        try
+        {
+            SaveData data = loader.LoadProgress(slotToLoad);
+            if (data != null)
+            {
+                nVidas = data.lives;
+                nCroquetas = data.coins;
+
+                pausado = false; // Reiniciar estado de pausa
+                Time.timeScale = 1; // Asegurar que el tiempo esté corriendo
+
+                if (scriptJugador != null)
+                {
+                    scriptJugador.setRun(data.canRun);
+                    scriptJugador.setJump(data.canJump);
+                    scriptJugador.setAttack(data.canAttack);
+                    scriptJugador.setLaunch(data.canLaunch);
+                    scriptJugador.setDoubleJump(data.canDoubleJump);
+                }
+
+                if (data.checkpointPosition != Vector3.zero && player != null)
+                {
+                    player.transform.position = data.checkpointPosition;
+                }
+
+                if (panelPausa != null)
+                {
+                    panelPausa.SetActive(false); // Desactivar menú de pausa
+                }
+
+                UpdateUIValues();
+                Debug.Log($"Partida cargada desde slot {slotToLoad}");
+            }
+            else
+            {
+                StartNewGame();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error cargando partida: {e.Message}");
+            StartNewGame();
+        }
+    }
+
+    private void UpdateUIValues()
+    {
+        if (croquetas != null) croquetas.text = nCroquetas.ToString();
+        if (UIVidasText1 != null) UIVidasText1.text = nVidas.ToString();
+        if (UIVidasText2 != null) UIVidasText2.text = nVidas.ToString();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+
+
+
+
+
+
 
     // Método para pausar el juego
     public void PauseGame()
     {
-        if (pausado) return; // Evitar múltiples pausas
+        if (!isInitialized || pausado) return;
 
-        // Lógica para pausar el juego
-        Time.timeScale = 0;  // Pausar el tiempo
+        Time.timeScale = 0;
         Debug.Log("Juego pausado");
         pausado = true;
-        panelPausa.SetActive(true);
-        UIVidasAnimator.SetTrigger("Baja");
-        Order.SetTrigger("Baja");
-        TextoPausa.SetTrigger("Pausado");
+
+        if (panelPausa != null) panelPausa.SetActive(true);
+        if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Baja");
+        if (Order != null) Order.SetTrigger("Baja");
+        if (TextoPausa != null) TextoPausa.SetTrigger("Pausado");
     }
 
     // Método para reanudar el juego
     public void ResumeGame()
     {
         if (!pausado) return; // Evitar reanudar si no está pausado
-
-        // Lógica para reanudar el juego
-        Time.timeScale = 1;  // Reanudar el tiempo
+        Time.timeScale = 1; // Reanudar el tiempo
         Debug.Log("Juego reanudado");
         pausado = false;
-        UIVidasAnimator.SetTrigger("Sube");
-        Order.SetTrigger("Sube");
-        TextoPausa.SetTrigger("Despausado");
-        panelPausa.SetActive(false);
+        if (panelPausa != null)
+        {
+            panelPausa.SetActive(false); // Cerrar menú de pausa
+        }
+        if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Sube");
+        if (Order != null) Order.SetTrigger("Sube");
+        if (TextoPausa != null) TextoPausa.SetTrigger("Despausado");
     }
 
     public void sumarCroqueta()
     {
         nCroquetas += 1;
         Order.Play("OrderBaja");
-        croquetas.text =nCroquetas.ToString();
+        croquetas.text = nCroquetas.ToString();
         Debug.Log("Croquetas recogidas = " + nCroquetas);
         Order.SetTrigger("Sube");
     }
@@ -199,29 +326,30 @@ public class GameManager : MonoBehaviour
     //Añade una habilidad nueva al jugador
     public void AddAbility(AbilityType newAbility)
     {
+        if (!isInitialized || scriptJugador == null) return;
+
         scriptJugador.AddAbility(newAbility);
 
-        switch (newAbility) {
-
-            case AbilityType.Correr:
-                UIAText.text = "Ahora Catti puede correr con Shift!";
-                Debug.Log("Ahora Catti puede correr con Shift!");
-            break;
-
-            case AbilityType.Saltar:
-                UIAText.text = "Ahora Catti puede saltar con la barra espaciadora!";
-            break;
-
-            case AbilityType.Atacar:
-                UIAText.text = "Ahora Catti puede atacar con J!";
-
-            break;
-
-            default: break;
+        if (UIAText != null)
+        {
+            switch (newAbility)
+            {
+                case AbilityType.Correr:
+                    UIAText.text = "Ahora Catti puede correr con Shift!";
+                    break;
+                case AbilityType.Saltar:
+                    UIAText.text = "Ahora Catti puede saltar con la barra espaciadora!";
+                    break;
+                case AbilityType.Atacar:
+                    UIAText.text = "Ahora Catti puede atacar con J!";
+                    break;
+            }
         }
 
-        UIAnimator.Play("UIHabilidadSubir");
-
+        if (UIAnimator != null)
+        {
+            UIAnimator.Play("UIHabilidadSubir");
+        }
     }
 
     public int getVidas()
@@ -236,23 +364,26 @@ public class GameManager : MonoBehaviour
 
     public void dañarJugador(int danyo)
     {
+        if (!isInitialized || scriptJugador == null) return;
 
         if (scriptJugador.getVulnerable() == false)
         {
             nVidas -= danyo;
-            UIVidasAnimator.SetTrigger("Baja");
-            UIVidasText1.text = nVidas.ToString();
-            UIVidasText2.text = (nVidas+1).ToString();
-            UIVidasAnimator2.SetTrigger("NumeroCae");
+
+            if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Baja");
+            if (UIVidasText1 != null) UIVidasText1.text = nVidas.ToString();
+            if (UIVidasText2 != null) UIVidasText2.text = (nVidas + 1).ToString();
+            if (UIVidasAnimator2 != null) UIVidasAnimator2.SetTrigger("NumeroCae");
+
             scriptJugador.activarVulnerabilidad();
-            UIVidasAnimator.SetTrigger("Sube");
+
+            if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Sube");
 
             if (nVidas <= 0)
             {
                 Morir();
             }
         }
-        
     }
 
     public void dañarJugadorAgua(int danyo)
@@ -284,6 +415,18 @@ public class GameManager : MonoBehaviour
 
     public void SaveProgress(int slot)
     {
+        if (!isInitialized)
+        {
+            Debug.LogWarning("Intentando guardar antes de la inicialización completa");
+            return;
+        }
+
+        if (scriptJugador == null)
+        {
+            Debug.LogError("No se puede guardar: scriptJugador es null");
+            return;
+        }
+
         SaveData data = new SaveData
         {
             lives = this.nVidas,
@@ -314,59 +457,6 @@ public class GameManager : MonoBehaviour
         return this.slot;
     }
 
-    public void cargarPartida(int slot)
-    {
-        if (saveManager == null || loader == null)
-        {
-            Debug.LogError("SaveManager o GameLoader no encontrados en la escena. No se puede cargar la partida.");
-            return;
-        }
-
-        if (!saveManager.SaveSlotExists(slot))
-        {
-            Debug.LogWarning($"No existe un archivo de guardado en el slot {slot}. Iniciando una nueva partida.");
-            StartGame();
-            return;
-        }
-
-        try
-        {
-            SaveData datosPartida = loader.LoadProgress(slot);
-
-            if (datosPartida == null)
-            {
-                Debug.LogWarning($"El archivo de guardado en el slot {slot} está vacío o corrupto. Iniciando una nueva partida.");
-                StartGame();
-                return;
-            }
-
-            nVidas = datosPartida.lives;
-            nCroquetas = datosPartida.coins;
-
-            scriptJugador.setRun(datosPartida.canRun);
-            scriptJugador.setJump(datosPartida.canJump);
-            scriptJugador.setAttack(datosPartida.canAttack);
-            scriptJugador.setLaunch(datosPartida.canLaunch);
-            scriptJugador.setDoubleJump(datosPartida.canDoubleJump);
-
-            checkpointPosition = datosPartida.checkpointPosition;
-
-            if (checkpointPosition != Vector3.zero)
-            {
-                player.transform.position = checkpointPosition;
-            }
-
-            Debug.Log($"Partida cargada desde el slot {slot}.");
-            retomarJuego();
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error al cargar la partida: {e.Message}");
-        }
-
-        Time.timeScale = 1;
-        pausado = false;
-    }
-
+ 
 
 }

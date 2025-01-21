@@ -12,6 +12,21 @@ public class SaveManager : MonoBehaviour
         InitializeSaveFolderPath();
     }
 
+    public void crearGuardadoPrueba()
+    {
+        SaveData Prueba = new SaveData();
+        Prueba.lives = 5;
+        Prueba.coins = 5;
+        Prueba.canJump = true;
+        Prueba.canRun = true;
+        Prueba.canDoubleJump = false;
+        Prueba.canLaunch = false;
+        Prueba.canAttack = false;
+        Prueba.checkpointPosition = new Vector3(870, 60, 560);
+
+        SaveGame(Prueba, 2);
+    }
+
     private void InitializeSaveFolderPath()
     {
         if (string.IsNullOrEmpty(saveFolderPath))

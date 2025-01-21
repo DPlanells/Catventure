@@ -16,6 +16,7 @@ TagManager:
   - UIVidasText1
   - UIVidasText2
   - Cargar
+  - TextoPausa
   layers:
   - Default
   - TransparentFX
