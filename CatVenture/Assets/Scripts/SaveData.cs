@@ -11,5 +11,6 @@ public class SaveData
     public bool canJump;
     public bool canAttack;
     public bool canLaunch;
+    public bool canDoubleJump;
     public Vector3 checkpointPosition;
 }

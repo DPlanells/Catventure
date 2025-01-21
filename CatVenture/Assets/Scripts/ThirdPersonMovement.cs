@@ -32,6 +32,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
     bool isGrounded;
     bool isDancing;
+    bool hasDoubleJumped;
 
 
     //Ataque
@@ -54,6 +55,7 @@ public class ThirdPersonMovement : MonoBehaviour
     public bool canJump = false;
     public bool canAttack = false;
     public bool canLaunch = false;
+    public bool canDoubleJump = false;
 
 
     // Lanzarse
@@ -96,6 +98,7 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             velocity.y = -5f;  // Asegura que no siga cayendo infinitamente
             horizontalVelocity = Vector3.zero;  // Reiniciar la velocidad horizontal al aterrizar
+            hasDoubleJumped = false; // Reiniciar el estado del doble salto al tocar el suelo
         }
 
         // Movimiento básico
@@ -132,13 +135,22 @@ public class ThirdPersonMovement : MonoBehaviour
         }
 
         // Salto
-        if (isGrounded && Input.GetButtonDown("Jump") && canJump)  // Solo salta si tiene la habilidad de Saltar
+        if (Input.GetButtonDown("Jump") && canJump)  // Solo salta si tiene la habilidad de Saltar
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            isDancing = false;
+            if (isGrounded) // Primer salto
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                isDancing = false;
+            }
+            else if (canDoubleJump && !hasDoubleJumped) // Doble salto
+            {
+                velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                hasDoubleJumped = true; // Marcar que ya se usó el doble salto
+                isDancing = false;
+            }
         }
 
-        //Baile
+        // Baile
         if (isGrounded && Input.GetButtonDown("Dance"))
         {
             isDancing = true;
@@ -154,6 +166,7 @@ public class ThirdPersonMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
+
 
 
 
@@ -319,6 +332,11 @@ public class ThirdPersonMovement : MonoBehaviour
         canLaunch = launch;
     }
 
+    public void setDoubleJump(bool doubleJump)
+    {
+        canDoubleJump = doubleJump;
+    }
+
     public bool getRun()
     {
         return canRun;
@@ -337,6 +355,11 @@ public class ThirdPersonMovement : MonoBehaviour
     public bool getLaunch()
     {
         return canLaunch;
+    }
+
+    public bool getDoubleJump()
+    {
+        return canDoubleJump;
     }
 
     public void activarVulnerabilidad()

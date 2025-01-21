@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);  // Si ya hay una instancia, destruir la nueva
         }
 
+        slot = 1;
+
         // Intentar encontrar al jugador automáticamente si no está asignado
         if (player == null)
         {
@@ -269,6 +271,7 @@ public class GameManager : MonoBehaviour
             canJump = scriptJugador.getJump(),
             canAttack = scriptJugador.getAttack(),
             canLaunch = scriptJugador.getLaunch(),
+            canDoubleJump = scriptJugador.getDoubleJump(),
             checkpointPosition = checkpointPosition
         };
 
@@ -301,6 +304,7 @@ public class GameManager : MonoBehaviour
             scriptJugador.setJump(datosPartida.canJump);
             scriptJugador.setAttack(datosPartida.canAttack);
             scriptJugador.setLaunch(datosPartida.canLaunch);
+            scriptJugador.setDoubleJump(datosPartida.canDoubleJump);
 
             retomarJuego();
         }
