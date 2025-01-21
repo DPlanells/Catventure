@@ -52,8 +52,8 @@ public class MenuPrinc : MonoBehaviour
         CargarUI = GameObject.FindGameObjectWithTag("Cargar").GetComponent<Canvas>();
 
         MCamera.SetBool("Creditos", false);
-        CredUI.enabled = false;
-        CargarUI.enabled = false;
+        enableAll(CredUI, false);
+        enableAll(CargarUI, false);
 
 
     }
@@ -126,8 +126,11 @@ public class MenuPrinc : MonoBehaviour
         } else { botonslot3.interactable = false; }
         MCamera.SetBool("Cargar", true);
         CargarUI.enabled = true;
+        enableAll(CargarUI, true);
         CredUI.enabled = false;
+        enableAll(CredUI, false);
         MUI.enabled = false;
+        enableAll(MUI, false);
         MCamera.Play("Continuar");
         Partida1.SetTrigger("trns");
         Partida2.SetTrigger("trns");
@@ -139,12 +142,14 @@ public class MenuPrinc : MonoBehaviour
     {
         Debug.Log(MCamera.gameObject);
         CargarUI.enabled = false;
+        enableAll(CargarUI, false);
         MUI.enabled = false;
+        enableAll(MUI, false);
         MCamera.SetBool("Creditos", true);
-        CredUI.enabled = true;
+        enableAll(CredUI, true);
         BotonVolver.SetTrigger("creditos");
         CredAnim.SetTrigger("creditos");
-
+        CredUI.enabled = true;
 
     }
     public void VolverPrincipal()
@@ -155,16 +160,21 @@ public class MenuPrinc : MonoBehaviour
             MCamera.SetBool("Creditos", false);
             CredAnim.SetTrigger("creditosvolver");
             CredUI.enabled = false;
+            enableAll(CredUI, false);
+
+
         }
         else if (CargarUI.enabled)
         {
-            MCamera.SetBool("Cargar", false);
             CargarUI.enabled = false;
+            MCamera.SetBool("Cargar", false);
+            enableAll(CargarUI, false);
         }
         MUIChild2.SetTrigger("trns");
         MUIChild3.SetTrigger("trns");
         MUIChild4.SetTrigger("trns");
         MUI.enabled = true;
+        enableAll(MUI, true);
     }
 
     public void salirJuego()
@@ -185,6 +195,16 @@ public class MenuPrinc : MonoBehaviour
             Debug.Log("cargado");
             SaveData info = saveManager.LoadGame(slot);
             return info;
+        }
+    }
+
+    public void enableAll(Canvas objeto, bool enable)
+    {
+        for (int i = 0; i < objeto.transform.childCount; i++)
+        {
+            var child = objeto.transform.GetChild(i).gameObject;
+            if (child != null)
+                child.SetActive(enable);
         }
     }
 }
