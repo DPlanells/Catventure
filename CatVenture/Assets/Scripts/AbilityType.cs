@@ -6,6 +6,8 @@ public enum AbilityType
 {
     Correr,
     Saltar,
-    Atacar
+    Atacar,
+    Lanzarse,
+    DobleSalto
 }
 

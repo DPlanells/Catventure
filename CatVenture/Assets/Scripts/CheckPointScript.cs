@@ -25,8 +25,14 @@ public class CheckPointScript : MonoBehaviour
             // Cambia el estado a activado
             isActivated = true;
 
+
+            coordenadas = puntoSpawn.position;
             GameManager.instance.setCheckPoint(coordenadas);
-            Debug.Log("Se ha guardado el checkPoint");
+
+            // Guardar el progreso del juego
+            GameManager.instance.SaveProgress(GameManager.instance.getSlotGuardado());
+
+            Debug.Log("Se ha guardado el checkpoint y el progreso del juego.");
 
         }
     }

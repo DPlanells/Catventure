@@ -503,6 +503,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   croquetas: {fileID: 0}
   Order: {fileID: 0}
+  UIVidas: {fileID: 0}
+  panelPausa: {fileID: 0}
+  TextoPausa: {fileID: 0}
 --- !u!1001 &1687769159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -556,6 +559,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 544332156}
     - target: {fileID: 5201983597595686297, guid: 32431448dc3992549b85c3ec53b00f3e, type: 3}
+      propertyPath: canJump
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201983597595686297, guid: 32431448dc3992549b85c3ec53b00f3e, type: 3}
       propertyPath: attackPoint
       value: 
       objectReference: {fileID: 356629607}
@@ -565,6 +572,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5201983597595686297, guid: 32431448dc3992549b85c3ec53b00f3e, type: 3}
       propertyPath: attackDamage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5201983597595686297, guid: 32431448dc3992549b85c3ec53b00f3e, type: 3}
+      propertyPath: canDoubleJump
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5201983597595686297, guid: 32431448dc3992549b85c3ec53b00f3e, type: 3}

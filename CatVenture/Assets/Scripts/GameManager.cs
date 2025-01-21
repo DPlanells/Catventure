@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -73,26 +74,43 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        saveManager = FindObjectOfType<SaveManager>();
+        if (saveManager == null)
+        {
+            Debug.LogError("SaveManager no encontrado en la escena.");
+            return;
+        }
+
+        loader = FindObjectOfType<GameLoader>();
+        if (loader == null)
+        {
+            Debug.LogError("GameLoader no encontrado en la escena.");
+            return;
+        }
+
         // Recuperar el slot seleccionado
         if (PlayerPrefs.HasKey("SlotSeleccionado"))
         {
             slot = PlayerPrefs.GetInt("SlotSeleccionado");
+            Debug.Log("Intentando cargar una partida");
             cargarPartida(slot); // Carga la partida automáticamente
         }
         else
         {
             Debug.LogWarning("No se encontró un slot seleccionado.");
         }
-
-        saveManager = FindObjectOfType<SaveManager>();
         loader = FindObjectOfType<GameLoader>();
 
-        cargarPartida(slot);
+
 
 
         pausado = false;
         Time.timeScale = 1;  // Asegurarse de que el tiempo esté en marcha
-        panelPausa.SetActive(false);
+
+        if (panelPausa != null)
+        {
+            panelPausa.SetActive(false); // Desactiva el panel desde el inicio
+        }
 
         StartGame();
     }
@@ -167,14 +185,6 @@ public class GameManager : MonoBehaviour
         Order.SetTrigger("Sube");
         TextoPausa.SetTrigger("Despausado");
         panelPausa.SetActive(false);
-    }
-
-    // Método para finalizar el juego
-    public void EndGame()
-    {
-        Debug.Log("Juego terminado");
-
-        //TODO Logica para volver al menú principal
     }
 
     public void sumarCroqueta()
@@ -258,8 +268,19 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Partida finalizada, jugador muerto");
 
-        //TODO Menu para volver al menu principal, o reiniciar desde el último punto de guardado
+
+        // Llamar al método que maneja el fin de la partida
+        EndGame();
     }
+
+    public void EndGame()
+    {
+        Debug.Log("Volviendo al menú principal...");
+
+        // Transición a la escena del menú principal
+        SceneManager.LoadScene("Sandbox menu");
+    }
+
 
     public void SaveProgress(int slot)
     {
@@ -288,35 +309,64 @@ public class GameManager : MonoBehaviour
         checkpointPosition = position;
     }
 
+    public int getSlotGuardado()
+    {
+        return this.slot;
+    }
+
     public void cargarPartida(int slot)
     {
-        StartGame();
-        //SaveData datosPartida = loader.LoadProgress(slot);
-        SaveData datosPartida = new SaveData();
-        if (datosPartida != null)
+        if (saveManager == null || loader == null)
         {
-            //Cargar los datos del save al manager
+            Debug.LogError("SaveManager o GameLoader no encontrados en la escena. No se puede cargar la partida.");
+            return;
+        }
+
+        if (!saveManager.SaveSlotExists(slot))
+        {
+            Debug.LogWarning($"No existe un archivo de guardado en el slot {slot}. Iniciando una nueva partida.");
+            StartGame();
+            return;
+        }
+
+        try
+        {
+            SaveData datosPartida = loader.LoadProgress(slot);
+
+            if (datosPartida == null)
+            {
+                Debug.LogWarning($"El archivo de guardado en el slot {slot} está vacío o corrupto. Iniciando una nueva partida.");
+                StartGame();
+                return;
+            }
+
             nVidas = datosPartida.lives;
             nCroquetas = datosPartida.coins;
 
-            
             scriptJugador.setRun(datosPartida.canRun);
             scriptJugador.setJump(datosPartida.canJump);
             scriptJugador.setAttack(datosPartida.canAttack);
             scriptJugador.setLaunch(datosPartida.canLaunch);
             scriptJugador.setDoubleJump(datosPartida.canDoubleJump);
 
+            checkpointPosition = datosPartida.checkpointPosition;
+
+            if (checkpointPosition != Vector3.zero)
+            {
+                player.transform.position = checkpointPosition;
+            }
+
+            Debug.Log($"Partida cargada desde el slot {slot}.");
             retomarJuego();
         }
-        else
+        catch (Exception e)
         {
-            StartGame();
+            Debug.LogError($"Error al cargar la partida: {e.Message}");
         }
 
-        // Asegurar que el juego no quede pausado
         Time.timeScale = 1;
         pausado = false;
-        panelPausa.SetActive(false);
     }
+
 
 }

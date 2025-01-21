@@ -14,9 +14,14 @@ public class GameLoader : MonoBehaviour
     public SaveData LoadProgress(int slot)
     {
         SaveData data = saveManager.LoadGame(slot);
+        if (data == null)
+        {
+            Debug.LogWarning($"No se pudo cargar el progreso para el slot {slot}. Archivo inexistente o corrupto.");
+            return null;
+        }
 
-
-        return null;
+        return data;
     }
+
 }
 
