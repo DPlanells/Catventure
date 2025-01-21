@@ -118,8 +118,8 @@ public class GameManager : MonoBehaviour
 
     void Update() {
 
-        if (Input.GetKeyDown(KeyCode.Escape)) { 
-            if(!pausado)
+        if (Input.GetButtonDown("Pause")) { 
+            if (!pausado)
                 PauseGame();
             else ResumeGame();
         }
