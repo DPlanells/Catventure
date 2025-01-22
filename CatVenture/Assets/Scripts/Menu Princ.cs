@@ -16,12 +16,16 @@ public class MenuPrinc : MonoBehaviour
     public Canvas MUI;
     public Canvas CredUI;
     public Canvas CargarUI;
+    public Canvas ElegirUI;
     public Animator CredAnim;
     public Animator BotonVolver;
     public Button IniciarBoton;
     public Button botonslot1;
     public Button botonslot2;
     public Button botonslot3;
+    public Button elegirslot1;
+    public Button elegirslot2;
+    public Button elegirslot3;
     public Button VolverBoton;
     public Animator Partida1;
     public Animator Partida2;
@@ -35,6 +39,12 @@ public class MenuPrinc : MonoBehaviour
     private int coinsslot1;
     private int coinsslot2;
     private int coinsslot3;
+    private int liveselegir1;
+    private int liveselegir2;
+    private int liveselegir3;
+    private int coinselegir1;
+    private int coinselegir2;
+    private int coinselegir3;
     private SaveData info1;
     private SaveData info2;
     private SaveData info3;
@@ -44,6 +54,12 @@ public class MenuPrinc : MonoBehaviour
     public TMP_Text UICoinsText1;
     public TMP_Text UICoinsText2;
     public TMP_Text UICoinsText3;
+    public TMP_Text UIVidasElegirText1;
+    public TMP_Text UIVidasElegirText2;
+    public TMP_Text UIVidasElegirText3;
+    public TMP_Text UICoinsElegirText1;
+    public TMP_Text UICoinsElegirText2;
+    public TMP_Text UICoinsElegirText3;
 
     private void Start()
     {
@@ -51,11 +67,12 @@ public class MenuPrinc : MonoBehaviour
         MUI = GameObject.FindGameObjectWithTag("MainMenu").GetComponent<Canvas>();
         CredUI = GameObject.FindGameObjectWithTag("Creditos").GetComponent<Canvas>();
         CargarUI = GameObject.FindGameObjectWithTag("Cargar").GetComponent<Canvas>();
+        ElegirUI = GameObject.FindGameObjectWithTag("Elegir").GetComponent<Canvas>();
 
         MCamera.SetBool("Creditos", false);
         enableAll(CredUI, false);
         enableAll(CargarUI, false);
-
+        enableAll(ElegirUI, false);
 
     }
 
@@ -68,7 +85,7 @@ public class MenuPrinc : MonoBehaviour
         PlayerPrefs.Save();
 
         // Cambia a la escena principal
-        SceneManager.LoadScene("MainScene");
+        NuevaPartida();
     }
 
     public void Update() {
@@ -94,7 +111,7 @@ public class MenuPrinc : MonoBehaviour
         yield return new WaitForSeconds(tiempo / 2);
         MUI.enabled = false;
         yield return new WaitForSeconds(tiempo);
-        SeleccionarSlot(Slot);
+        SceneManager.LoadScene("Menu Principal");
 
     }
 
@@ -113,19 +130,24 @@ public class MenuPrinc : MonoBehaviour
         info1 = getInfoSlot(1);
         info2 = getInfoSlot(2);
         info3 = getInfoSlot(3);
-        if (saveManager.SaveSlotExists(1)) { 
+        if (saveManager.SaveSlotExists(1)) {
             UIVidasText1.text = info1.lives.ToString();
             UICoinsText1.text = info1.coins.ToString();
+            
         } else { botonslot1.interactable = false; }
-        if (saveManager.SaveSlotExists(2)) { 
+        if (saveManager.SaveSlotExists(2)) {
             UIVidasText2.text = info2.lives.ToString();
             UICoinsText2.text = info2.coins.ToString();
+            UIVidasElegirText2.text = info2.lives.ToString();
+            UICoinsElegirText2.text = info2.coins.ToString();
         } else { botonslot2.interactable = false; }
-        if (saveManager.SaveSlotExists(3)) { 
+        if (saveManager.SaveSlotExists(3)) {
             UIVidasText3.text = info3.lives.ToString();
             UICoinsText3.text = info3.coins.ToString();
         } else { botonslot3.interactable = false; }
         MCamera.SetBool("Cargar", true);
+        ElegirUI.enabled = false;
+        enableAll(ElegirUI, false);
         CargarUI.enabled = true;
         enableAll(CargarUI, true);
         CredUI.enabled = false;
@@ -137,11 +159,53 @@ public class MenuPrinc : MonoBehaviour
         Partida2.SetTrigger("trns");
         Partida3.SetTrigger("trns");
     }
-    
+
+    public void ElegirSlot()
+    {
+        SaveManager saveManager = GameObject.FindObjectOfType<SaveManager>();
+        info1 = getInfoSlot(1);
+        info2 = getInfoSlot(2);
+        info3 = getInfoSlot(3);
+        if (saveManager.SaveSlotExists(1))
+        {
+            UIVidasElegirText1.text = info1.lives.ToString();
+            UICoinsElegirText1.text = info1.coins.ToString();
+            elegirslot1.interactable = false;
+        }
+        else { botonslot1.interactable = true; }
+        if (saveManager.SaveSlotExists(2))
+        {
+            UIVidasElegirText2.text = info2.lives.ToString();
+            UICoinsElegirText2.text = info2.coins.ToString();
+            elegirslot2.interactable = false;
+        }
+        else { botonslot2.interactable = true; }
+        if (saveManager.SaveSlotExists(3))
+        {
+            UIVidasElegirText3.text = info3.lives.ToString();
+            UICoinsElegirText3.text = info3.coins.ToString();
+            elegirslot3.interactable = false;
+        }
+        else { botonslot3.interactable = true; }
+        MCamera.SetBool("Elegir", true);
+        CargarUI.enabled = false;
+        enableAll(CargarUI, false);
+        ElegirUI.enabled = true;
+        enableAll(ElegirUI, true);
+        CredUI.enabled = false;
+        enableAll(CredUI, false);
+        MUI.enabled = false;
+        enableAll(MUI, false);
+        Partida1.SetTrigger("trns");
+        Partida2.SetTrigger("trns");
+        Partida3.SetTrigger("trns");
+    }
 
     public void Creditos()
     {
         Debug.Log(MCamera.gameObject);
+        ElegirUI.enabled = false;
+        enableAll(ElegirUI, false);
         CargarUI.enabled = false;
         enableAll(CargarUI, false);
         MUI.enabled = false;
@@ -164,6 +228,12 @@ public class MenuPrinc : MonoBehaviour
             enableAll(CredUI, false);
 
 
+        }
+        else if (ElegirUI.enabled)
+        {
+            ElegirUI.enabled = false;
+            MCamera.SetBool("Elegir", false);
+            enableAll(ElegirUI, false);
         }
         else if (CargarUI.enabled)
         {
