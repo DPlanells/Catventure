@@ -401,22 +401,4 @@ public class ThirdPersonMovement : MonoBehaviour
         transform.position = posicion;
     }
 
-
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Se ha chocado con: " + collision.gameObject.name);
-
-       
-        if (collision.gameObject.CompareTag("AguaFondo")){
-            GameManager.instance.dañarJugadorAgua(3);
-            Debug.Log("Se han quitado 3 vidas");
-        }
-        
-    }
-
-    
-
-
-
 }

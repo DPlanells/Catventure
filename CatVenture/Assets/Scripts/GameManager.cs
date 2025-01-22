@@ -6,114 +6,113 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
 
-    // Singleton instance
+    // Instancia única (Singleton) del GameManager
     public static GameManager instance;
 
+    // Bandera para verificar si la inicialización ha sido completada
     private bool isInitialized = false;
 
-    private int nVidas;
-    public TMP_Text croquetas;
-    public Animator Order;
-    private int nCroquetas;
+    // Variables del estado del juego
+    private int nVidas; // Número de vidas del jugador
+    public TMP_Text croquetas; // Referencia al texto que muestra el número de croquetas
+    public Animator Order; // Animador para las croquetas
+    private int nCroquetas; // Contador de croquetas recogidas
 
+    // Referencias a objetos de la escena
+    private GameObject player; // Referencia al jugador
+    private ThirdPersonMovement scriptJugador; // Script de movimiento del jugador
+    private GameObject UIHabilidad; // Referencia a la UI de habilidades
+    public GameObject UIVidas; // Referencia al objeto de la UI de vidas
+    private Animator UIAnimator; // Animador de la UI de habilidades
+    private Animator UIVidasAnimator; // Animador de la UI de vidas
+    private TMP_Text UIAText; // Texto de la UI de habilidades
+    private TMP_Text UIVidasText1; // Texto principal del número de vidas
+    private TMP_Text UIVidasText2; // Texto secundario del número de vidas
+    private Animator UIVidasAnimator2; // Animador secundario de la UI de vidas
+    private GameObject panelPausa; // Panel de pausa
+    private Animator TextoPausa; // Animador del texto de pausa
 
+    // Variables relacionadas con el sistema de guardado
+    private SaveManager saveManager; // Administrador de guardados
+    private GameLoader loader; // Cargador de datos guardados
+    private int slot; // Slot de guardado seleccionado
+    private Vector3 checkpointPosition; // Última posición de guardado
+    private bool pausado; // Indica si el juego está pausado
 
-    private GameObject player;
-    private ThirdPersonMovement scriptJugador;
-    private GameObject UIHabilidad;
-    public GameObject UIVidas;
-    private Animator UIAnimator;
-    private Animator UIVidasAnimator;
-    private TMP_Text UIAText;
-    private TMP_Text UIVidasText1;
-    private TMP_Text UIVidasText2;
-    private Animator UIVidasAnimator2;
-    private GameObject panelPausa;
-    private Animator TextoPausa;
-    //Guardado
-    private SaveManager saveManager;
-    private GameLoader loader;
-    private int slot;
-    private Vector3 checkpointPosition;
-    private Boolean pausado;
-
-    private bool uiInitialized = false;
-    private bool needsUIUpdate = false;
+    // Flags para la inicialización de la UI
+    private bool uiInitialized = false; // Indica si la UI ha sido inicializada
+    private bool needsUIUpdate = false; // Indica si es necesario actualizar la UI
 
 
     private void Awake()
     {
-        // Singleton setup
+        // Configuración del Singleton para asegurar una única instancia
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // Persistir entre escenas
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // Destruir duplicados
             return;
         }
 
-        // Registrar para eventos de escena
+        // Registrar el evento de cambio de escena
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
     {
-        // Inicialización básica del juego
+        // Configuración inicial de vidas y croquetas
         nVidas = 7;
         nCroquetas = 0;
-
-        // Registramos un callback para cuando la escena termine de cargar
-        //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Reset estado
+        // Reiniciar el estado al cambiar de escena
         isInitialized = false;
 
-        // Solo proceder si estamos en la escena del juego
-        if (scene.name == "MainScene") // Ajusta al nombre de tu escena
+        // Si estamos en la escena principal del juego, inicializamos el estado
+        if (scene.name == "MainScene")
         {
             StartCoroutine(InitializeGameState());
         }
         else
         {
-            if (panelPausa != null)
-            {
-                panelPausa.SetActive(false); // Asegurar que el panel de pausa esté desactivado
-            }
-            pausado = false; // Reiniciar estado de pausa
-            Time.timeScale = 1; // Asegurar que el tiempo esté corriendo
+            // Desactivar el panel de pausa y reiniciar el estado
+            if (panelPausa != null) panelPausa.SetActive(false);
+            pausado = false;
+            Time.timeScale = 1; // Asegurar que el tiempo corre normalmente
         }
     }
 
     private IEnumerator InitializeGameState()
     {
-        // Esperar un frame para asegurar que todos los objetos estén en la escena
+        // Esperar un frame para asegurar que todos los objetos estén listos
         yield return null;
 
-        // Inicializar managers
+        // Inicializar el sistema de guardado y cargado
         saveManager = FindObjectOfType<SaveManager>();
         loader = FindObjectOfType<GameLoader>();
 
-        // Encontrar al jugador
+        // Encontrar al jugador en la escena
         player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             scriptJugador = player.GetComponent<ThirdPersonMovement>();
         }
 
-        // Inicializar UI
+        // Inicializar los componentes de la UI
         if (InitializeUIComponents())
         {
-            // Cargar datos o iniciar nueva partida
+            // Cargar datos guardados o iniciar un nuevo juego
             if (PlayerPrefs.HasKey("SlotSeleccionado"))
             {
                 slot = PlayerPrefs.GetInt("SlotSeleccionado");
@@ -131,7 +130,7 @@ public class GameManager : MonoBehaviour
                 StartNewGame();
             }
 
-            isInitialized = true;
+            isInitialized = true; // Marcar la inicialización como completada
         }
         else
         {
@@ -143,9 +142,9 @@ public class GameManager : MonoBehaviour
     {
         try
         {
+            // Obtener referencias a los objetos de la UI en la escena
             panelPausa = GameObject.Find("Panel Pausa");
             TextoPausa = GameObject.FindGameObjectWithTag("TextoPausa")?.GetComponent<Animator>();
-
             croquetas = GameObject.FindGameObjectWithTag("Cont")?.GetComponent<TMP_Text>();
             Order = GameObject.FindGameObjectWithTag("Order")?.GetComponent<Animator>();
             UIHabilidad = GameObject.FindGameObjectWithTag("UIHabilidad");
@@ -153,6 +152,7 @@ public class GameManager : MonoBehaviour
             UIVidasText1 = GameObject.FindGameObjectWithTag("UIVidasText1")?.GetComponent<TMP_Text>();
             UIVidasText2 = GameObject.FindGameObjectWithTag("UIVidasText2")?.GetComponent<TMP_Text>();
 
+            // Inicializar animadores de la UI
             if (UIHabilidad != null)
             {
                 UIAnimator = UIHabilidad.GetComponent<Animator>();
@@ -165,7 +165,7 @@ public class GameManager : MonoBehaviour
                 UIVidasAnimator2 = GameObject.FindGameObjectWithTag("UIVidasText2")?.GetComponent<Animator>();
             }
 
-            return ValidateUIComponents();
+            return ValidateUIComponents(); // Validar que todos los componentes necesarios fueron encontrados
         }
         catch (Exception e)
         {
@@ -176,70 +176,78 @@ public class GameManager : MonoBehaviour
 
     private bool ValidateUIComponents()
     {
+        // Verificar que todos los componentes necesarios de la UI están presentes
         return croquetas != null && Order != null && UIHabilidad != null && UIVidas != null &&
                UIVidasText1 != null && UIVidasText2 != null && UIAnimator != null &&
                UIVidasAnimator != null && UIAText != null && UIVidasAnimator2 != null;
     }
 
 
-    // 2. Sistema de polling para asegurar la inicialización de UI
     private void Update()
     {
-        // Si necesitamos actualizar la UI y aún no está inicializada, intentamos de nuevo
+        // Intentar inicializar la UI si aún no lo ha sido pero se requiere
         if (needsUIUpdate && !uiInitialized)
         {
             InitializeUIComponents();
         }
 
-        // El resto de la lógica del Update...
+        // Manejar la pausa del juego
         if (Input.GetButtonDown("Pause"))
         {
             if (!pausado) PauseGame();
-
             else ResumeGame();
         }
     }
 
-    
 
+
+    // Método para iniciar un nuevo juego con valores iniciales
     private void StartNewGame()
     {
         nVidas = 7;
         nCroquetas = 0;
         pausado = false;
-        Time.timeScale = 1;
+        Time.timeScale = 1; // Asegurar que el tiempo corre normalmente
 
         if (panelPausa != null)
         {
             panelPausa.SetActive(false);
         }
 
-        UpdateUIValues();
+        UpdateUIValues(); // Actualizar los valores en la UI
         Debug.Log("Nueva partida iniciada");
     }
 
+    // Carga los datos del juego desde un slot específico
     private void LoadGameData(int slotToLoad)
     {
         try
         {
+            // Intenta cargar los datos guardados desde el slot especificado
             SaveData data = loader.LoadProgress(slotToLoad);
             if (data != null)
             {
+                // Asignar las variables del juego desde los datos cargados
                 nVidas = data.lives;
                 nCroquetas = data.coins;
 
-                pausado = false; // Reiniciar estado de pausa
-                Time.timeScale = 1; // Asegurar que el tiempo esté corriendo
+                pausado = false; // Reinicia el estado de pausa
+                Time.timeScale = 1; // Asegura que el tiempo esté corriendo
 
                 if (scriptJugador != null)
                 {
+                    // Configura las habilidades del jugador según los datos guardados
                     scriptJugador.setRun(data.canRun);
                     scriptJugador.setJump(data.canJump);
                     scriptJugador.setAttack(data.canAttack);
                     scriptJugador.setLaunch(data.canLaunch);
                     scriptJugador.setDoubleJump(data.canDoubleJump);
+
+                    //Elimina del mapa los pescados de las habilidades ya encontradas
+                    quitarPescados();
                 }
 
+                // Reubica al jugador al último checkpoint si corresponde
                 if (data.checkpointPosition != Vector3.zero && player != null)
                 {
                     player.transform.position = data.checkpointPosition;
@@ -247,24 +255,67 @@ public class GameManager : MonoBehaviour
 
                 if (panelPausa != null)
                 {
-                    panelPausa.SetActive(false); // Desactivar menú de pausa
+                    panelPausa.SetActive(false); // Desactiva el menú de pausa
                 }
 
-                UpdateUIValues();
+                UpdateUIValues(); // Actualiza la interfaz con los nuevos valores
                 Debug.Log($"Partida cargada desde slot {slotToLoad}");
             }
             else
             {
+                // Si no hay datos guardados, comienza un nuevo juego
                 StartNewGame();
             }
         }
         catch (Exception e)
         {
+            // Manejo de errores en caso de fallo al cargar los datos
             Debug.LogError($"Error cargando partida: {e.Message}");
-            StartNewGame();
+            StartNewGame(); // Comienza un nuevo juego en caso de error
         }
     }
 
+    private void quitarPescados()
+    {
+        try
+        {
+            if(scriptJugador != null)
+            {
+                if (scriptJugador.canRun)
+                {
+                    GameObject pescado = GameObject.Find("PescadoCorrer");
+                    Destroy(pescado);
+                }
+                if (scriptJugador.canJump)
+                {
+                    GameObject pescado = GameObject.Find("PescadoSaltar");
+                    Destroy(pescado);
+                }
+                if (scriptJugador.canAttack)
+                {
+                    GameObject pescado = GameObject.Find("PescadoAtacar");
+                    Destroy(pescado);
+                }
+                if (scriptJugador.canLaunch)
+                {
+                    GameObject pescado = GameObject.Find("PescadoLanzarse");
+                    Destroy(pescado);
+                }
+                if (scriptJugador.canDoubleJump)
+                {
+                    GameObject pescado = GameObject.Find("PescadoSaltarDoble");
+                    Destroy(pescado);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Ha aparecido el siguiente error al eliminar pescados de la escena: " + e.Message);
+        }
+    }
+
+
+    // Actualiza los valores de la interfaz de usuario relacionados con vidas y croquetas
     private void UpdateUIValues()
     {
         if (croquetas != null) croquetas.text = nCroquetas.ToString();
@@ -272,6 +323,7 @@ public class GameManager : MonoBehaviour
         if (UIVidasText2 != null) UIVidasText2.text = nVidas.ToString();
     }
 
+    // Limpia los eventos al destruir la instancia
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -279,141 +331,155 @@ public class GameManager : MonoBehaviour
 
 
 
-
-
-
-
-
-    // Método para pausar el juego
+    // Pausa el juego y actualiza el estado correspondiente
     public void PauseGame()
     {
-        if (!isInitialized || pausado) return;
+        if (!isInitialized || pausado) return; // Evita pausar si ya está pausado o no inicializado
 
-        Time.timeScale = 0;
+        Time.timeScale = 0; // Detiene el tiempo del juego
         Debug.Log("Juego pausado");
         pausado = true;
 
-        if (panelPausa != null) panelPausa.SetActive(true);
+        if (panelPausa != null) panelPausa.SetActive(true); // Muestra el menú de pausa
         if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Baja");
         if (Order != null) Order.SetTrigger("Baja");
         if (TextoPausa != null) TextoPausa.SetTrigger("Pausado");
     }
 
-    // Método para reanudar el juego
+    // Reanuda el juego después de haber sido pausado
     public void ResumeGame()
     {
-        if (!pausado) return; // Evitar reanudar si no está pausado
-        Time.timeScale = 1; // Reanudar el tiempo
+        if (!pausado) return; // Evita reanudar si no está pausado
+
+        Time.timeScale = 1; // Restaura el tiempo del juego
         Debug.Log("Juego reanudado");
         pausado = false;
-        if (panelPausa != null)
-        {
-            panelPausa.SetActive(false); // Cerrar menú de pausa
-        }
+
+        if (panelPausa != null) panelPausa.SetActive(false); // Oculta el menú de pausa
         if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Sube");
         if (Order != null) Order.SetTrigger("Sube");
         if (TextoPausa != null) TextoPausa.SetTrigger("Despausado");
     }
 
+    // Incrementa el contador de croquetas y actualiza la interfaz
     public void sumarCroqueta()
     {
-        nCroquetas += 1;
+        nCroquetas += 1; // Incrementa la cantidad de croquetas
         Order.Play("OrderBaja");
-        croquetas.text = nCroquetas.ToString();
+        croquetas.text = nCroquetas.ToString(); // Actualiza el texto de croquetas en la interfaz
         Debug.Log("Croquetas recogidas = " + nCroquetas);
         Order.SetTrigger("Sube");
     }
 
-    //Añade una habilidad nueva al jugador
+
+    // Añade una nueva habilidad al jugador
     public void AddAbility(AbilityType newAbility)
     {
         if (!isInitialized || scriptJugador == null) return;
 
-        scriptJugador.AddAbility(newAbility);
+        scriptJugador.AddAbility(newAbility); // Agrega la habilidad al jugador
 
         if (UIAText != null)
         {
+            // Muestra un mensaje en la interfaz dependiendo de la habilidad adquirida
             switch (newAbility)
             {
                 case AbilityType.Correr:
-                    UIAText.text = "Ahora Catti puede correr con Shift!";
+                    UIAText.text = "¡Ahora Catti puede correr con Shift!";
                     break;
                 case AbilityType.Saltar:
-                    UIAText.text = "Ahora Catti puede saltar con la barra espaciadora!";
+                    UIAText.text = "¡Ahora Catti puede saltar con la barra espaciadora!";
                     break;
                 case AbilityType.Atacar:
-                    UIAText.text = "Ahora Catti puede atacar con J!";
+                    UIAText.text = "¡Ahora Catti puede atacar con J!";
+                    break;
+                case AbilityType.Lanzarse:
+                    UIAText.text = "¡Ahora Catti puede lanzarse en el aire";
+                    break;
+                case AbilityType.DobleSalto:
+                    UIAText.text = "¡Ahora Catti puede hacer un salto en el aire!";
                     break;
             }
         }
 
         if (UIAnimator != null)
         {
-            UIAnimator.Play("UIHabilidadSubir");
+            UIAnimator.Play("UIHabilidadSubir"); // Activa una animación en la interfaz
         }
     }
 
+    // Devuelve la cantidad de vidas actuales del jugador
     public int getVidas()
     {
         return nVidas;
     }
 
+    // Devuelve la cantidad de croquetas actuales del jugador
     public int getCroquetas()
     {
         return nCroquetas;
     }
 
+    // Reduce las vidas del jugador por un daño recibido y actualiza la interfaz
     public void dañarJugador(int danyo)
     {
         if (!isInitialized || scriptJugador == null) return;
 
-        if (scriptJugador.getVulnerable() == false)
+        if (!scriptJugador.getVulnerable()) // Verifica si el jugador no es vulnerable
         {
-            nVidas -= danyo;
+            nVidas -= danyo; // Resta las vidas según el daño recibido
 
             if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Baja");
             if (UIVidasText1 != null) UIVidasText1.text = nVidas.ToString();
             if (UIVidasText2 != null) UIVidasText2.text = (nVidas + 1).ToString();
             if (UIVidasAnimator2 != null) UIVidasAnimator2.SetTrigger("NumeroCae");
 
-            scriptJugador.activarVulnerabilidad();
+            scriptJugador.activarVulnerabilidad(); // Activa la vulnerabilidad del jugador temporalmente
 
             if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Sube");
 
             if (nVidas <= 0)
             {
-                Morir();
+                Morir(); // Llama al método de muerte si no hay vidas restantes
             }
         }
     }
 
+    // Reduce las vidas del jugador específicamente por daño de agua
     public void dañarJugadorAgua(int danyo)
     {
         nVidas -= danyo;
+
+        if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Baja");
+        if (UIVidasText1 != null) UIVidasText1.text = nVidas.ToString();
+        if (UIVidasText2 != null) UIVidasText2.text = (nVidas + 1).ToString();
+        if (UIVidasAnimator2 != null) UIVidasAnimator2.SetTrigger("NumeroCae");
+
+        if (UIVidasAnimator != null) UIVidasAnimator.SetTrigger("Sube");
+
         if (nVidas <= 0)
         {
             Morir();
         }
     }
 
+    // Maneja la lógica cuando el jugador pierde todas las vidas
     private void Morir()
     {
         Debug.Log("Partida finalizada, jugador muerto");
-
-
-        // Llamar al método que maneja el fin de la partida
-        EndGame();
+        EndGame(); // Llama al método para finalizar la partida
     }
 
+    // Finaliza el juego y regresa al menú principal
     public void EndGame()
     {
         Debug.Log("Volviendo al menú principal...");
-
-        // Transición a la escena del menú principal
-        SceneManager.LoadScene("Sandbox menu");
+        SceneManager.LoadScene("Sandbox menu"); // Cambia a la escena del menú principal
     }
 
 
+
+    // Guarda el progreso del juego en un slot específico
     public void SaveProgress(int slot)
     {
         if (!isInitialized)
@@ -440,24 +506,24 @@ public class GameManager : MonoBehaviour
             checkpointPosition = checkpointPosition
         };
 
-        saveManager.SaveGame(data, slot);
+        saveManager.SaveGame(data, slot); // Guarda los datos en el slot especificado
     }
 
+    // Establece el slot de guardado actual
     public void setSlotGuardado(int slot)
     {
         this.slot = slot;
     }
 
+    // Establece la posición del último checkpoint alcanzado
     public void setCheckPoint(Vector3 position)
     {
         checkpointPosition = position;
     }
 
+    // Devuelve el slot de guardado actual
     public int getSlotGuardado()
     {
         return this.slot;
     }
-
- 
-
 }
