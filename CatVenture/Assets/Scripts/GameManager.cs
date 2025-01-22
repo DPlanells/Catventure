@@ -385,16 +385,16 @@ public class GameManager : MonoBehaviour
             switch (newAbility)
             {
                 case AbilityType.Correr:
-                    UIAText.text = "¡Ahora Catti puede correr con Shift!";
+                    UIAText.text = "¡Ahora Catti puede correr con LB!";
                     break;
                 case AbilityType.Saltar:
-                    UIAText.text = "¡Ahora Catti puede saltar con la barra espaciadora!";
+                    UIAText.text = "¡Ahora Catti puede saltar con la A!";
                     break;
                 case AbilityType.Atacar:
-                    UIAText.text = "¡Ahora Catti puede atacar con J!";
+                    UIAText.text = "¡Ahora Catti puede atacar con LT!";
                     break;
                 case AbilityType.Lanzarse:
-                    UIAText.text = "¡Ahora Catti puede lanzarse en el aire";
+                    UIAText.text = "¡Ahora Catti puede lanzarse en el aire con X";
                     break;
                 case AbilityType.DobleSalto:
                     UIAText.text = "¡Ahora Catti puede hacer un salto en el aire!";
@@ -525,5 +525,10 @@ public class GameManager : MonoBehaviour
     public int getSlotGuardado()
     {
         return this.slot;
+    }
+
+    public void volverMenuPrincipal()
+    {
+        SceneManager.LoadScene("SandBox Menu");
     }
 }
