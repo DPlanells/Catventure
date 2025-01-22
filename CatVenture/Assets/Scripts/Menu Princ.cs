@@ -27,7 +27,8 @@ public class MenuPrinc : MonoBehaviour
     public Animator Partida2;
     public Animator Partida3;
     int tiempo;
-    private int Slot = 2;
+    //private int Slot = 2;
+    private int Slot;
     private int livesslot1;
     private int livesslot2;
     private int livesslot3;
