@@ -320,6 +320,9 @@ public class ThirdPersonMovement : MonoBehaviour
             case AbilityType.Lanzarse:
                 canLaunch = true;
                 break;
+            case AbilityType.DobleSalto:
+                canDoubleJump = true;
+                break;
         }
         Debug.Log("Habilidad adquirida: " + ability);
     }
