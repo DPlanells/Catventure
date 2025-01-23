@@ -85,7 +85,21 @@ public class MenuPrinc : MonoBehaviour
         PlayerPrefs.Save();
 
         // Cambia a la escena principal
-        NuevaPartida();
+        MCamera.SetTrigger("IniciarPartida");
+        tiempo = 3;
+        CoroutineTimer(tiempo);
+    }
+    public void SeleccionarSlotIni(int slot)
+    {
+        Slot = slot;
+
+        // Guarda el slot seleccionado temporalmente en PlayerPrefs o en un singleton temporal
+        PlayerPrefs.SetInt("SlotSeleccionado", Slot);
+        PlayerPrefs.Save();
+
+        // Cambia a la escena principal
+        MCamera.SetTrigger("IniciarPartida");
+        SceneManager.LoadScene("Intro");
     }
 
     public void Update() {
@@ -111,7 +125,7 @@ public class MenuPrinc : MonoBehaviour
         yield return new WaitForSeconds(tiempo / 2);
         MUI.enabled = false;
         yield return new WaitForSeconds(tiempo);
-        SceneManager.LoadScene("Intro");
+        SceneManager.LoadScene("MainScene");
 
     }
 
@@ -120,7 +134,8 @@ public class MenuPrinc : MonoBehaviour
     {
         MCamera.SetTrigger("IniciarPartida");
         tiempo = 3;
-        CoroutineTimer(tiempo);
+        SceneManager.LoadScene("Intro");
+        
 
 
     }
