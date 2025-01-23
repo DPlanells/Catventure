@@ -111,7 +111,7 @@ public class MenuPrinc : MonoBehaviour
         yield return new WaitForSeconds(tiempo / 2);
         MUI.enabled = false;
         yield return new WaitForSeconds(tiempo);
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("Intro");
 
     }
 
