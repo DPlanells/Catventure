@@ -6,17 +6,25 @@ using System.Collections;
 public  class AudioScript : MonoBehaviour
 {
 
-    public AudioSource audio1;
-    public AudioSource audio2;
+    public AudioSource audio;
+    private AudioSource[] ListaAudio;
 
 
     public void OnTriggerEnter(Collider other)
     {
+        ListaAudio = FindObjectsOfType<AudioSource>();
         Debug.Log("cambio musica");
-        StartCoroutine(FadeOut(audio1, 3));
-        StartCoroutine(FadeIn(audio2, 3));
+
+        foreach (AudioSource a in ListaAudio) { 
+            if(a.name != audio.name) { StartCoroutine(FadeOut(a, 10)); }
+             }
+
+        StartCoroutine(FadeIn(audio, 10));
+
 
     }
+
+   
     public static IEnumerator FadeOut(AudioSource audioSource, float FadeTime)
     {
         float startVolume = audioSource.volume;
@@ -24,7 +32,6 @@ public  class AudioScript : MonoBehaviour
         while (audioSource.volume > 0)
         {
             audioSource.volume -= startVolume * Time.deltaTime / FadeTime;
-            Debug.Log("Dentro while");
             yield return null;
         }
 
@@ -39,14 +46,14 @@ public  class AudioScript : MonoBehaviour
         audioSource.volume = 0;
         audioSource.Play();
 
-        while (audioSource.volume < 1.0f)
+        while (audioSource.volume < 0.6f)
         {
             audioSource.volume += startVolume * Time.deltaTime / FadeTime;
 
             yield return null;
         }
 
-        audioSource.volume = 1f;
+        audioSource.volume = 0.5f;
     }
 }
 
